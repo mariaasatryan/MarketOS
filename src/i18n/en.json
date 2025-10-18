@@ -1,0 +1,134 @@
+{
+  "app": {
+    "title": "MarketOS",
+    "subtitle": "Marketplace Management"
+  },
+  "nav": {
+    "dashboard": "Overview",
+    "products": "Products",
+    "reviews": "Reviews",
+    "advertising": "Advertising",
+    "analytics": "Analytics",
+    "calendar": "Calendar",
+    "sheets": "Sheets",
+    "disk": "Disk",
+    "aiTools": "AI Tools",
+    "settings": "Settings",
+    "logout": "Logout",
+    "editMode": "Edit Mode"
+  },
+  "dashboard": {
+    "title": "Overview",
+    "subtitle": "Key metrics overview",
+    "orders": "Orders",
+    "revenue": "Revenue",
+    "stock": "Stock",
+    "conversion": "Conversion",
+    "adsSpend": "Ad Spend",
+    "roas": "ROAS",
+    "period": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days",
+      "year": "Year",
+      "custom": "Custom"
+    }
+  },
+  "disk": {
+    "title": "Disk",
+    "subtitle": "Manage files and links",
+    "addLink": "Add Link",
+    "search": "Search...",
+    "linkName": "Link Name",
+    "linkUrl": "Link URL",
+    "category": "Category",
+    "categories": {
+      "photos": "Photo Sessions",
+      "infographics": "Infographics",
+      "documents": "Documents",
+      "presentations": "Presentations",
+      "education": "Educational Materials"
+    }
+  },
+  "aiTools": {
+    "title": "AI Tools",
+    "subtitle": "AI-powered automation",
+    "descriptions": {
+      "title": "AI Descriptions",
+      "subtitle": "Generate product descriptions",
+      "uploadPhoto": "Upload product photo",
+      "marketplace": "Marketplace",
+      "style": "Description style",
+      "length": "Text length",
+      "generate": "Generate",
+      "copy": "Copy",
+      "styles": {
+        "informational": "Informational",
+        "selling": "Selling",
+        "concise": "Concise",
+        "emotional": "Emotional"
+      },
+      "lengths": {
+        "short": "Short",
+        "standard": "Standard",
+        "extended": "Extended"
+      }
+    },
+    "autoReply": {
+      "title": "AI Auto-Reply",
+      "subtitle": "Automatic review responses",
+      "brandStyle": "Brand Style",
+      "generateReply": "Generate Reply",
+      "publish": "Publish",
+      "styles": {
+        "official": "Official",
+        "friendly": "Friendly",
+        "humorous": "Humorous",
+        "empathetic": "Empathetic"
+      }
+    },
+    "supplierSearch": {
+      "title": "AI Supplier Search",
+      "subtitle": "Find suppliers in China",
+      "uploadPhoto": "Upload product photo",
+      "platform": "Platform",
+      "search": "Search Suppliers",
+      "export": "Export CSV",
+      "saveToSheets": "Save to Sheets",
+      "filters": {
+        "all": "All Platforms",
+        "alibaba": "Alibaba",
+        "1688": "1688",
+        "taobao": "Taobao"
+      }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage integrations and settings",
+    "integrations": "Integrations",
+    "appearance": "Appearance",
+    "profile": "Profile",
+    "connectedMarketplaces": "Connected Marketplaces",
+    "addMarketplace": "Add Marketplace",
+    "apiToken": "API Token",
+    "testConnection": "Test Connection",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "appMode": "App Mode",
+    "mockMode": "Demo (Mock)",
+    "liveMode": "Live",
+    "logout": "Logout"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "filter": "All",
+    "search": "Search..."
+  }
+}

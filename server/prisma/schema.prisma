@@ -1,0 +1,84 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql"; url = env("DATABASE_URL") }
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  role         Role     @default(MANAGER)
+  passwordHash String   // если используешь email+pass
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  settings     Json?
+  tokens       Token[]
+}
+
+model Token {
+  id           String   @id @default(cuid())
+  userId       String
+  type         TokenType
+  marketplace  Marketplace?
+  encValue     Bytes    // зашифрованный токен
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  User         User     @relation(fields: [userId], references: [id])
+}
+
+model SheetLink {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  mp        Marketplace?
+  url       String
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model DriveCategory {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  createdAt DateTime @default(now())
+  links     DriveLink[]
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model DriveLink {
+  id         String   @id @default(cuid())
+  categoryId String
+  title      String
+  url        String
+  createdAt  DateTime @default(now())
+  Category   DriveCategory @relation(fields: [categoryId], references: [id])
+}
+
+model CalendarEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  type      EventType
+  marketplace Marketplace?
+  startsAt  DateTime
+  endsAt    DateTime?
+  warehouse String?
+  assignee  String?
+  relatedId String?
+  meetUrl   String?
+  externalId String? // Google event id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  meta      Json?
+  createdAt DateTime @default(now())
+}
+
+enum Role { ADMIN MANAGER VIEWER }
+enum TokenType { MP GOOGLE }
+enum Marketplace { WB Ozon YaMarket }
+enum EventType { supply shipment deadline reminder custom }

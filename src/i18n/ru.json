@@ -1,0 +1,134 @@
+{
+  "app": {
+    "title": "MarketOS",
+    "subtitle": "Управление маркетплейсами"
+  },
+  "nav": {
+    "dashboard": "Обзорная панель",
+    "products": "Товары",
+    "reviews": "Отзывы",
+    "advertising": "Реклама",
+    "analytics": "Аналитика",
+    "calendar": "Календарь",
+    "sheets": "Таблицы",
+    "disk": "Диск",
+    "aiTools": "ИИ-инструменты",
+    "settings": "Настройки",
+    "logout": "Выйти",
+    "editMode": "Режим редактирования"
+  },
+  "dashboard": {
+    "title": "Обзорная панель",
+    "subtitle": "Обзор ключевых показателей",
+    "orders": "Заказы",
+    "revenue": "Выручка",
+    "stock": "Остатки",
+    "conversion": "Конверсия",
+    "adsSpend": "Расход на рекламу",
+    "roas": "ROAS",
+    "period": {
+      "7d": "7 дней",
+      "30d": "30 дней",
+      "90d": "90 дней",
+      "year": "Год",
+      "custom": "Произвольный"
+    }
+  },
+  "disk": {
+    "title": "Диск",
+    "subtitle": "Управление файлами и ссылками",
+    "addLink": "Добавить ссылку",
+    "search": "Поиск...",
+    "linkName": "Название ссылки",
+    "linkUrl": "URL ссылки",
+    "category": "Категория",
+    "categories": {
+      "photos": "Фотосъёмки",
+      "infographics": "Инфографика",
+      "documents": "Документы",
+      "presentations": "Презентации",
+      "education": "Обучающие материалы"
+    }
+  },
+  "aiTools": {
+    "title": "ИИ-инструменты",
+    "subtitle": "Автоматизация с помощью искусственного интеллекта",
+    "descriptions": {
+      "title": "ИИ-описания",
+      "subtitle": "Генерация описаний для товаров",
+      "uploadPhoto": "Загрузить фото товара",
+      "marketplace": "Маркетплейс",
+      "style": "Стиль описания",
+      "length": "Длина текста",
+      "generate": "Сгенерировать",
+      "copy": "Копировать",
+      "styles": {
+        "informational": "Информационный",
+        "selling": "Продающий",
+        "concise": "Лаконичный",
+        "emotional": "Эмоциональный"
+      },
+      "lengths": {
+        "short": "Короткое",
+        "standard": "Стандартное",
+        "extended": "Расширенное"
+      }
+    },
+    "autoReply": {
+      "title": "ИИ-автоответы",
+      "subtitle": "Автоматические ответы на отзывы",
+      "brandStyle": "Стиль бренда",
+      "generateReply": "Сгенерировать ответ",
+      "publish": "Опубликовать",
+      "styles": {
+        "official": "Официальный",
+        "friendly": "Дружелюбный",
+        "humorous": "Юмористический",
+        "empathetic": "Эмпатичный"
+      }
+    },
+    "supplierSearch": {
+      "title": "ИИ-поиск поставщика",
+      "subtitle": "Поиск поставщиков в Китае",
+      "uploadPhoto": "Загрузить фото товара",
+      "platform": "Платформа",
+      "search": "Найти поставщиков",
+      "export": "Экспорт CSV",
+      "saveToSheets": "Сохранить в Таблицы",
+      "filters": {
+        "all": "Все платформы",
+        "alibaba": "Alibaba",
+        "1688": "1688",
+        "taobao": "Taobao"
+      }
+    }
+  },
+  "settings": {
+    "title": "Настройки",
+    "subtitle": "Управление интеграциями и настройками",
+    "integrations": "Интеграции",
+    "appearance": "Внешний вид",
+    "profile": "Профиль",
+    "connectedMarketplaces": "Подключенные маркетплейсы",
+    "addMarketplace": "Добавить маркетплейс",
+    "apiToken": "API Token",
+    "testConnection": "Проверить подключение",
+    "language": "Язык",
+    "theme": "Тема",
+    "light": "Светлая",
+    "dark": "Тёмная",
+    "appMode": "Режим приложения",
+    "mockMode": "Демо (Mock)",
+    "liveMode": "Боевой (Live)",
+    "logout": "Выйти из аккаунта"
+  },
+  "common": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "add": "Добавить",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "filter": "Все",
+    "search": "Поиск..."
+  }
+}
