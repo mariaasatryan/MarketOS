@@ -146,10 +146,10 @@ export class RealMarketplaceService {
     }
   }
 
-  // Ozon API методы (согласно официальной документации)
+  // Ozon API методы (обновлено согласно официальной документации)
   static async getOzonOrders(apiToken: string, clientId: string, dateFrom: string, dateTo: string) {
     try {
-      // Используем правильный эндпоинт для получения заказов FBS
+      // Согласно документации Ozon API - используем правильный эндпоинт для заказов
       const response = await this.makeRequest(
         'https://api-seller.ozon.ru/v3/posting/fbs/list',
         {

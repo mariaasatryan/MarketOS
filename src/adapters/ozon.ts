@@ -11,6 +11,8 @@ import type {
 import { apiClient } from '../services/apiClient';
 
 const OZON_API_BASE = 'https://api-seller.ozon.ru';
+const OZON_V2_API_BASE = 'https://api-seller.ozon.ru/v2';
+const OZON_V3_API_BASE = 'https://api-seller.ozon.ru/v3';
 
 export class OzonAdapter implements MarketplaceAdapter {
   private clientId: string;
@@ -82,7 +84,7 @@ export class OzonAdapter implements MarketplaceAdapter {
   async getOrders(dateRange: DateRange): Promise<Order[]> {
     try {
       const response = await apiClient.request({
-        url: `${OZON_API_BASE}/v3/posting/fbs/list`,
+        url: `${OZON_V3_API_BASE}/posting/fbs/list`,
         method: 'POST',
         headers: this.getHeaders(),
         data: {
@@ -125,7 +127,7 @@ export class OzonAdapter implements MarketplaceAdapter {
   async getStocks(): Promise<any[]> {
     try {
       const response = await apiClient.request({
-        url: `${OZON_API_BASE}/v3/product/info/stocks`,
+        url: `${OZON_V3_API_BASE}/product/info/stocks`,
         method: 'POST',
         headers: this.getHeaders(),
         data: {
@@ -177,7 +179,7 @@ export class OzonAdapter implements MarketplaceAdapter {
   private async getProductList(): Promise<any[]> {
     try {
       const response = await apiClient.request({
-        url: `${OZON_API_BASE}/v2/product/list`,
+        url: `${OZON_V2_API_BASE}/product/list`,
         method: 'POST',
         headers: this.getHeaders(),
         data: {
@@ -269,7 +271,7 @@ export class OzonAdapter implements MarketplaceAdapter {
   async getShipments(dateRange: DateRange): Promise<CalendarEvent[]> {
     try {
       const response = await apiClient.request({
-        url: `${OZON_API_BASE}/v3/posting/fbs/list`,
+        url: `${OZON_V3_API_BASE}/posting/fbs/list`,
         method: 'POST',
         headers: this.getHeaders(),
         data: {
