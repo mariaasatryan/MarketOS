@@ -98,7 +98,7 @@ export default function Dashboard() {
       </div>
 
       {integrations.length === 0 ? (
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-8 text-center">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-8 text-center">
           <Package size={48} className="mx-auto text-red-600 dark:text-blue-400 mb-4" />
           <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-2">Подключите маркетплейс</h3>
           <p className="text-slate-600 dark:text-slate-400 mb-4">
@@ -152,8 +152,8 @@ export default function Dashboard() {
               <h2 className="text-xl font-semibold text-slate-800 dark:text-white mb-4">Детализация по маркетплейсам</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {stats.byMarketplace.wildberries.products > 0 && (
-                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <h3 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">Wildberries</h3>
+                  <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                    <h3 className="font-semibold text-red-800 dark:text-red-300 mb-2">Wildberries</h3>
                     <div className="space-y-1 text-sm">
                       <div>Товары: {stats.byMarketplace.wildberries.products}</div>
                       <div>Заказы: {stats.byMarketplace.wildberries.orders}</div>
