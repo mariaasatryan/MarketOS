@@ -247,8 +247,8 @@ export function Sheets() {
                 />
               </div>
 
-              <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                <p className="text-sm text-blue-900 dark:text-blue-300">
+              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                <p className="text-sm text-blue-900 dark:text-red-300">
                   <strong>Совет:</strong> Убедитесь, что доступ к таблице настроен как «Доступна всем, у кого есть ссылка» для корректного отображения предпросмотра.
                 </p>
               </div>

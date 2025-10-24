@@ -131,7 +131,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
           onClick={() => setActiveTab('integrations')}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'integrations'
-              ? 'text-red-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-red-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -144,7 +144,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
           onClick={() => setActiveTab('appearance')}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'appearance'
-              ? 'text-red-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-red-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -157,7 +157,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
           onClick={() => setActiveTab('team')}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'team'
-              ? 'text-red-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-red-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -170,7 +170,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
           onClick={() => setActiveTab('profile')}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'profile'
-              ? 'text-red-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-red-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -202,7 +202,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
                   >
                     <Sun size={24} className={theme === 'light' ? 'text-red-600' : 'text-slate-600 dark:text-slate-400'} />
                     <div className="text-left">
-                      <div className={`font-medium ${theme === 'light' ? 'text-blue-700 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300'}`}>
+                      <div className={`font-medium ${theme === 'light' ? 'text-blue-700 dark:text-red-400' : 'text-slate-700 dark:text-slate-300'}`}>
                         {t('settings.light')}
                       </div>
                       <div className="text-xs text-slate-500 dark:text-slate-400">Светлый фон</div>
@@ -217,9 +217,9 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
                         : 'border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
                     }`}
                   >
-                    <Moon size={24} className={theme === 'dark' ? 'text-red-600 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400'} />
+                    <Moon size={24} className={theme === 'dark' ? 'text-red-600 dark:text-red-400' : 'text-slate-600 dark:text-slate-400'} />
                     <div className="text-left">
-                      <div className={`font-medium ${theme === 'dark' ? 'text-blue-700 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300'}`}>
+                      <div className={`font-medium ${theme === 'dark' ? 'text-blue-700 dark:text-red-400' : 'text-slate-700 dark:text-slate-300'}`}>
                         {t('settings.dark')}
                       </div>
                       <div className="text-xs text-slate-500 dark:text-slate-400">Тёмный фон</div>
@@ -241,9 +241,9 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
                         : 'border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
                     }`}
                   >
-                    <Globe size={24} className={language === 'ru' ? 'text-red-600 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400'} />
+                    <Globe size={24} className={language === 'ru' ? 'text-red-600 dark:text-red-400' : 'text-slate-600 dark:text-slate-400'} />
                     <div className="text-left">
-                      <div className={`font-medium ${language === 'ru' ? 'text-blue-700 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300'}`}>
+                      <div className={`font-medium ${language === 'ru' ? 'text-blue-700 dark:text-red-400' : 'text-slate-700 dark:text-slate-300'}`}>
                         Русский
                       </div>
                       <div className="text-xs text-slate-500 dark:text-slate-400">Russian</div>
@@ -258,9 +258,9 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
                         : 'border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
                     }`}
                   >
-                    <Globe size={24} className={language === 'en' ? 'text-red-600 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400'} />
+                    <Globe size={24} className={language === 'en' ? 'text-red-600 dark:text-red-400' : 'text-slate-600 dark:text-slate-400'} />
                     <div className="text-left">
-                      <div className={`font-medium ${language === 'en' ? 'text-blue-700 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300'}`}>
+                      <div className={`font-medium ${language === 'en' ? 'text-blue-700 dark:text-red-400' : 'text-slate-700 dark:text-slate-300'}`}>
                         English
                       </div>
                       <div className="text-xs text-slate-500 dark:text-slate-400">Английский</div>
@@ -480,7 +480,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
                   <tr key={employee.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-red-600 dark:text-blue-400 font-semibold">
+                        <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-400 font-semibold">
                           {employee.name.charAt(0)}
                         </div>
                         <div className="ml-4">
@@ -516,7 +516,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
             <h2 className="text-xl font-semibold text-slate-800 dark:text-white mb-6">{t('settings.profile')}</h2>
 
             <div className="flex items-center gap-6 mb-6 pb-6 border-b border-slate-200 dark:border-slate-700">
-              <div className="w-20 h-20 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-red-600 dark:text-blue-400 text-2xl font-semibold">
+              <div className="w-20 h-20 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-400 text-2xl font-semibold">
                 <User size={32} />
               </div>
               <div>

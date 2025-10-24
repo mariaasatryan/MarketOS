@@ -141,8 +141,8 @@ export function Analytics() {
             <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-sm text-slate-600 dark:text-slate-400">Общие продажи</p>
-                <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg">
-                  <DollarSign size={20} className="text-red-600 dark:text-blue-400" />
+                <div className="bg-red-100 dark:bg-red-900/30 p-2 rounded-lg">
+                  <DollarSign size={20} className="text-red-600 dark:text-red-400" />
                 </div>
               </div>
               <p className="text-3xl font-bold text-slate-800 dark:text-white mb-2">

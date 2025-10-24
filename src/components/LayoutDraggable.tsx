@@ -186,7 +186,7 @@ export function LayoutDraggable({ children, currentPage, onNavigate, isEditMode 
                             onClick={() => !isDragging && !isEditMode && onNavigate(item.id)}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                               isActive
-                                ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-medium'
+                                ? 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 font-medium'
                                 : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                             } ${
                               snapshot.isDragging

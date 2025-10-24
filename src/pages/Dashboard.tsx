@@ -99,7 +99,7 @@ export default function Dashboard() {
 
       {integrations.length === 0 ? (
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-8 text-center">
-          <Package size={48} className="mx-auto text-red-600 dark:text-blue-400 mb-4" />
+          <Package size={48} className="mx-auto text-red-600 dark:text-red-400 mb-4" />
           <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-2">Подключите маркетплейс</h3>
           <p className="text-slate-600 dark:text-slate-400 mb-4">
             Добавьте API-токен маркетплейса в настройках для синхронизации данных
@@ -197,8 +197,8 @@ export default function Dashboard() {
                   className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                      <Users size={20} className="text-red-600 dark:text-blue-400" />
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                      <Users size={20} className="text-red-600 dark:text-red-400" />
                     </div>
                     <div>
                       <h3 className="font-medium text-slate-800 dark:text-white">
@@ -231,7 +231,7 @@ export default function Dashboard() {
 
 function StatCard({ icon, title, value, color }: { icon: React.ReactNode; title: string; value: string | number; color: string }) {
   const colorClasses: Record<string, string> = {
-    blue: 'bg-blue-100 dark:bg-blue-900/30 text-red-600 dark:text-blue-400',
+    blue: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
     green: 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',
     purple: 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400',
     orange: 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400',

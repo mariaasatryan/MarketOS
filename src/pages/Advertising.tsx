@@ -158,7 +158,7 @@ export function Advertising() {
         <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
           <div className="flex items-center justify-between mb-2">
             <span className="text-slate-600 dark:text-slate-400 text-sm">Общий бюджет</span>
-            <TrendingUp className="text-red-600 dark:text-blue-400" size={20} />
+            <TrendingUp className="text-red-600 dark:text-red-400" size={20} />
           </div>
           <p className="text-2xl font-bold text-slate-800 dark:text-white">{totalBudget.toLocaleString('ru-RU')} ₽</p>
         </div>
@@ -249,7 +249,7 @@ export function Advertising() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleToggleStatus(campaign.id, campaign.status)}
-                        className="text-red-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
+                        className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium"
                       >
                         {campaign.status === 'active' ? 'Пауза' : 'Запустить'}
                       </button>

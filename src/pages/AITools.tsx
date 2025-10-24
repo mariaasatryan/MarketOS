@@ -86,7 +86,7 @@ export function AITools() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-          <Sparkles className="text-red-600 dark:text-blue-400" />
+          <Sparkles className="text-red-600 dark:text-red-400" />
           {t('aiTools.title')}
         </h1>
         <p className="text-slate-600 dark:text-slate-400 mt-1">{t('aiTools.subtitle')}</p>
@@ -97,7 +97,7 @@ export function AITools() {
           onClick={() => { setActiveTab('descriptions'); setShowResult(false); }}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'descriptions'
-              ? 'text-red-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-red-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -110,7 +110,7 @@ export function AITools() {
           onClick={() => { setActiveTab('autoReply'); setShowResult(false); }}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'autoReply'
-              ? 'text-red-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-red-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -123,7 +123,7 @@ export function AITools() {
           onClick={() => { setActiveTab('supplierSearch'); setShowResult(false); }}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'supplierSearch'
-              ? 'text-red-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-red-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
@@ -249,7 +249,7 @@ export function AITools() {
                   <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Теги</p>
                   <div className="flex flex-wrap gap-2">
                     {mockDescriptionResult.tags.map((tag, i) => (
-                      <span key={i} className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-red-600 dark:text-blue-400 rounded text-xs">
+                      <span key={i} className="px-2 py-1 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded text-xs">
                         #{tag}
                       </span>
                     ))}
@@ -438,7 +438,7 @@ export function AITools() {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-red-600 dark:text-blue-400 rounded text-xs font-medium">
+                          <span className="px-2 py-1 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded text-xs font-medium">
                             {supplier.platform}
                           </span>
                           <h4 className="font-semibold text-slate-800 dark:text-white">{supplier.title}</h4>
@@ -462,7 +462,7 @@ export function AITools() {
                         href={supplier.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="ml-4 p-2 text-red-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                        className="ml-4 p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                       >
                         <ExternalLink size={20} />
                       </a>
