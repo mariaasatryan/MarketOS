@@ -86,7 +86,7 @@ export function AITools() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-          <Sparkles className="text-blue-600 dark:text-blue-400" />
+          <Sparkles className="text-red-600 dark:text-blue-400" />
           {t('aiTools.title')}
         </h1>
         <p className="text-slate-600 dark:text-slate-400 mt-1">{t('aiTools.subtitle')}</p>
@@ -97,39 +97,39 @@ export function AITools() {
           onClick={() => { setActiveTab('descriptions'); setShowResult(false); }}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'descriptions'
-              ? 'text-blue-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-blue-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           {t('aiTools.descriptions.title')}
           {activeTab === 'descriptions' && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400" />
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 dark:bg-blue-400" />
           )}
         </button>
         <button
           onClick={() => { setActiveTab('autoReply'); setShowResult(false); }}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'autoReply'
-              ? 'text-blue-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-blue-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           {t('aiTools.autoReply.title')}
           {activeTab === 'autoReply' && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400" />
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 dark:bg-blue-400" />
           )}
         </button>
         <button
           onClick={() => { setActiveTab('supplierSearch'); setShowResult(false); }}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'supplierSearch'
-              ? 'text-blue-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-blue-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           {t('aiTools.supplierSearch.title')}
           {activeTab === 'supplierSearch' && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400" />
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 dark:bg-blue-400" />
           )}
         </button>
       </div>
@@ -199,13 +199,13 @@ export function AITools() {
                   {t('aiTools.descriptions.length')}
                 </label>
                 <div className="flex gap-2">
-                  <button className="flex-1 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-blue-600 hover:text-white transition-colors">
+                  <button className="flex-1 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-red-600 hover:text-white transition-colors">
                     {t('aiTools.descriptions.lengths.short')}
                   </button>
-                  <button className="flex-1 px-4 py-2 rounded-lg bg-blue-600 text-white">
+                  <button className="flex-1 px-4 py-2 rounded-lg bg-red-600 text-white">
                     {t('aiTools.descriptions.lengths.standard')}
                   </button>
-                  <button className="flex-1 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-blue-600 hover:text-white transition-colors">
+                  <button className="flex-1 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-red-600 hover:text-white transition-colors">
                     {t('aiTools.descriptions.lengths.extended')}
                   </button>
                 </div>
@@ -213,7 +213,7 @@ export function AITools() {
 
               <button
                 onClick={() => setShowResult(true)}
-                className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
+                className="w-full bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
               >
                 <Sparkles size={20} />
                 {t('aiTools.descriptions.generate')}
@@ -249,7 +249,7 @@ export function AITools() {
                   <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Теги</p>
                   <div className="flex flex-wrap gap-2">
                     {mockDescriptionResult.tags.map((tag, i) => (
-                      <span key={i} className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded text-xs">
+                      <span key={i} className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-red-600 dark:text-blue-400 rounded text-xs">
                         #{tag}
                       </span>
                     ))}
@@ -257,7 +257,7 @@ export function AITools() {
                 </div>
 
                 <div className="flex gap-2 pt-4">
-                  <button className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                  <button className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
                     <Copy size={16} />
                     {t('aiTools.descriptions.copy')}
                   </button>
@@ -301,8 +301,8 @@ export function AITools() {
                       onClick={() => setBrandStyle(style)}
                       className={`px-4 py-2 rounded-lg font-medium ${
                         style === brandStyle
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-blue-600 hover:text-white'
+                          ? 'bg-red-600 text-white'
+                          : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-red-600 hover:text-white'
                       } transition-colors`}
                     >
                       {t(`aiTools.autoReply.styles.${style}`)}
@@ -316,7 +316,7 @@ export function AITools() {
                   setReplyText(generateReply(brandStyle));
                   setShowResult(true);
                 }}
-                className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
+                className="w-full bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
               >
                 <Sparkles size={20} />
                 {t('aiTools.autoReply.generateReply')}
@@ -336,7 +336,7 @@ export function AITools() {
               />
 
               <div className="flex gap-2">
-                <button className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                <button className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                   {t('aiTools.autoReply.publish')}
                 </button>
                 <button className="px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center gap-2">
@@ -404,7 +404,7 @@ export function AITools() {
 
                 <button
                   onClick={() => setShowResult(true)}
-                  className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
+                  className="w-full bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
                 >
                   <Sparkles size={20} />
                   {t('aiTools.supplierSearch.search')}
@@ -423,7 +423,7 @@ export function AITools() {
                   <button className="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors text-sm font-medium">
                     {t('aiTools.supplierSearch.export')}
                   </button>
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+                  <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
                     {t('aiTools.supplierSearch.saveToSheets')}
                   </button>
                 </div>
@@ -438,7 +438,7 @@ export function AITools() {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded text-xs font-medium">
+                          <span className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-red-600 dark:text-blue-400 rounded text-xs font-medium">
                             {supplier.platform}
                           </span>
                           <h4 className="font-semibold text-slate-800 dark:text-white">{supplier.title}</h4>
@@ -462,7 +462,7 @@ export function AITools() {
                         href={supplier.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="ml-4 p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                        className="ml-4 p-2 text-red-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                       >
                         <ExternalLink size={20} />
                       </a>

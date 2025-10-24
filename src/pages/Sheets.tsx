@@ -127,7 +127,7 @@ export function Sheets() {
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
+          className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
         >
           <Plus size={20} />
           Добавить таблицу
@@ -264,7 +264,7 @@ export function Sheets() {
               <button
                 onClick={handleAddSheet}
                 disabled={!newSheet.name || !newSheet.url}
-                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Добавить
               </button>

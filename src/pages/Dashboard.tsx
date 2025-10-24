@@ -89,7 +89,7 @@ export default function Dashboard() {
           <button
             onClick={handleSyncData}
             disabled={syncing}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <RefreshCw size={20} className={syncing ? 'animate-spin' : ''} />
             {syncing ? 'Синхронизация...' : 'Синхронизировать'}
@@ -99,7 +99,7 @@ export default function Dashboard() {
 
       {integrations.length === 0 ? (
         <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-8 text-center">
-          <Package size={48} className="mx-auto text-blue-600 dark:text-blue-400 mb-4" />
+          <Package size={48} className="mx-auto text-red-600 dark:text-blue-400 mb-4" />
           <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-2">Подключите маркетплейс</h3>
           <p className="text-slate-600 dark:text-slate-400 mb-4">
             Добавьте API-токен маркетплейса в настройках для синхронизации данных
@@ -198,7 +198,7 @@ export default function Dashboard() {
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                      <Users size={20} className="text-blue-600 dark:text-blue-400" />
+                      <Users size={20} className="text-red-600 dark:text-blue-400" />
                     </div>
                     <div>
                       <h3 className="font-medium text-slate-800 dark:text-white">
@@ -231,7 +231,7 @@ export default function Dashboard() {
 
 function StatCard({ icon, title, value, color }: { icon: React.ReactNode; title: string; value: string | number; color: string }) {
   const colorClasses: Record<string, string> = {
-    blue: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
+    blue: 'bg-blue-100 dark:bg-blue-900/30 text-red-600 dark:text-blue-400',
     green: 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',
     purple: 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400',
     orange: 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400',

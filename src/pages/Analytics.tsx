@@ -102,7 +102,7 @@ export function Analytics() {
             onClick={() => setPeriod('7d')}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               period === '7d'
-                ? 'bg-blue-600 text-white'
+                ? 'bg-red-600 text-white'
                 : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
             }`}
           >
@@ -112,7 +112,7 @@ export function Analytics() {
             onClick={() => setPeriod('30d')}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               period === '30d'
-                ? 'bg-blue-600 text-white'
+                ? 'bg-red-600 text-white'
                 : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
             }`}
           >
@@ -122,7 +122,7 @@ export function Analytics() {
             onClick={() => setPeriod('90d')}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               period === '90d'
-                ? 'bg-blue-600 text-white'
+                ? 'bg-red-600 text-white'
                 : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
             }`}
           >
@@ -142,7 +142,7 @@ export function Analytics() {
               <div className="flex items-center justify-between mb-4">
                 <p className="text-sm text-slate-600 dark:text-slate-400">Общие продажи</p>
                 <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg">
-                  <DollarSign size={20} className="text-blue-600 dark:text-blue-400" />
+                  <DollarSign size={20} className="text-red-600 dark:text-blue-400" />
                 </div>
               </div>
               <p className="text-3xl font-bold text-slate-800 dark:text-white mb-2">
@@ -187,7 +187,7 @@ export function Analytics() {
                       <div className="flex items-center gap-2 mb-1">
                         <div className="flex-1 bg-slate-100 dark:bg-slate-700 rounded-full h-6 overflow-hidden">
                           <div
-                            className="bg-blue-600 dark:bg-blue-500 h-full rounded-full flex items-center justify-end pr-2"
+                            className="bg-red-600 dark:bg-blue-500 h-full rounded-full flex items-center justify-end pr-2"
                             style={{ width: `${(data.total_sales / maxSales) * 100}%` }}
                           >
                             <span className="text-xs text-white font-medium">
@@ -221,7 +221,7 @@ export function Analytics() {
                     key={product.id}
                     className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg"
                   >
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 dark:bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 dark:bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
                       {idx + 1}
                     </div>
                     <div className="flex-1">

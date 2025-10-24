@@ -21,7 +21,7 @@ interface CalendarEvent {
 
 
 const eventTypeColors = {
-  supply: 'bg-blue-100 text-blue-700 border-blue-300',
+  supply: 'bg-red-100 text-red-700 border-red-300',
   shipment: 'bg-green-100 text-green-700 border-green-300',
   reminder: 'bg-red-100 text-red-700 border-red-300',
   meeting: 'bg-purple-100 text-purple-700 border-purple-300',
@@ -255,7 +255,7 @@ export function Calendar() {
             setSelectedEvent(null);
             setShowEventModal(true);
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
+          className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 font-medium"
         >
           <Plus size={20} />
           Добавить событие
@@ -289,7 +289,7 @@ export function Calendar() {
               onClick={() => setView('month')}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 view === 'month'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-red-600 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -299,7 +299,7 @@ export function Calendar() {
               onClick={() => setView('week')}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 view === 'week'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-red-600 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -328,14 +328,14 @@ export function Calendar() {
                     className={`min-h-[100px] p-2 rounded-lg border ${
                       day
                         ? isToday
-                          ? 'bg-blue-50 border-blue-300'
+                          ? 'bg-red-50 border-red-300'
                           : 'bg-white border-slate-200 hover:border-slate-300'
                         : 'bg-slate-50 border-slate-100'
                     } transition-colors`}
                   >
                     {day && (
                       <>
-                        <div className={`text-sm font-semibold mb-2 ${isToday ? 'text-blue-600' : 'text-slate-700'}`}>
+                        <div className={`text-sm font-semibold mb-2 ${isToday ? 'text-red-600' : 'text-slate-700'}`}>
                           {typeof day === 'number' ? day : day.getDate()}
                         </div>
                         <div className="space-y-1">
@@ -374,8 +374,8 @@ export function Calendar() {
                 const isToday = day.getDate() === new Date().getDate();
 
                 return (
-                  <div key={index} className={`p-3 rounded-lg border ${isToday ? 'bg-blue-50 border-blue-300' : 'bg-white border-slate-200'}`}>
-                    <div className={`text-center mb-3 ${isToday ? 'text-blue-600' : 'text-slate-700'}`}>
+                  <div key={index} className={`p-3 rounded-lg border ${isToday ? 'bg-red-50 border-red-300' : 'bg-white border-slate-200'}`}>
+                    <div className={`text-center mb-3 ${isToday ? 'text-red-600' : 'text-slate-700'}`}>
                       <div className="text-xs font-medium">
                         {day.toLocaleDateString('ru-RU', { weekday: 'short' })}
                       </div>
@@ -420,7 +420,7 @@ export function Calendar() {
                 <input
                   type="text"
                   defaultValue={selectedEvent?.title}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   placeholder="Название события"
                 />
               </div>
@@ -431,7 +431,7 @@ export function Calendar() {
                   <input
                     type="date"
                     defaultValue={selectedEvent?.date}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   />
                 </div>
                 <div>
@@ -439,7 +439,7 @@ export function Calendar() {
                   <input
                     type="time"
                     defaultValue={selectedEvent?.time}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   />
                 </div>
               </div>
@@ -449,7 +449,7 @@ export function Calendar() {
                 <div className="flex gap-2">
                   <select
                     defaultValue={selectedEvent?.type}
-                    className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   >
                     <option value="supply">Поставка</option>
                     <option value="shipment">Отгрузка</option>
@@ -476,7 +476,7 @@ export function Calendar() {
                 <label className="block text-sm font-medium text-slate-700 mb-1">Маркетплейс</label>
                 <select
                   defaultValue={selectedEvent?.marketplace}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 >
                   <option value="">Без привязки</option>
                   <option value="WB">Wildberries</option>
@@ -490,7 +490,7 @@ export function Calendar() {
                 <label className="block text-sm font-medium text-slate-700 mb-1">Описание</label>
                 <textarea
                   defaultValue={selectedEvent?.description}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
                   rows={3}
                   placeholder="Дополнительная информация"
                 />
@@ -500,7 +500,7 @@ export function Calendar() {
                 <input
                   type="checkbox"
                   defaultChecked={selectedEvent?.isImportant}
-                  className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-2 focus:ring-blue-500"
+                  className="w-4 h-4 text-red-600 border-slate-300 rounded focus:ring-2 focus:ring-red-500"
                 />
                 <span className="text-sm text-slate-700">Важное событие</span>
               </label>
@@ -535,7 +535,7 @@ export function Calendar() {
                   }
                   setShowEventModal(false);
                 }}
-                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium"
               >
                 {selectedEvent ? 'Сохранить' : 'Создать'}
               </button>
@@ -614,7 +614,7 @@ export function Calendar() {
                     setShowSidebar(false);
                     setShowEventModal(true);
                   }}
-                  className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
+                  className="w-full bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2 font-medium"
                 >
                   <Edit2 size={16} />
                   Изменить
@@ -651,7 +651,7 @@ export function Calendar() {
                   type="text"
                   value={newCustomType.name}
                   onChange={(e) => setNewCustomType({...newCustomType, name: e.target.value})}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   placeholder="Например: Конференция"
                 />
               </div>
@@ -660,7 +660,7 @@ export function Calendar() {
                 <label className="block text-sm font-medium text-slate-700 mb-1">Цвет</label>
                 <div className="grid grid-cols-4 gap-2">
                   {[
-                    {name: 'Синий', value: 'bg-blue-100 text-blue-700 border-blue-300'},
+                    {name: 'Синий', value: 'bg-red-100 text-red-700 border-red-300'},
                     {name: 'Зеленый', value: 'bg-green-100 text-green-700 border-green-300'},
                     {name: 'Красный', value: 'bg-red-100 text-red-700 border-red-300'},
                     {name: 'Фиолетовый', value: 'bg-purple-100 text-purple-700 border-purple-300'},
@@ -674,7 +674,7 @@ export function Calendar() {
                       type="button"
                       onClick={() => setNewCustomType({...newCustomType, color: color.value})}
                       className={`px-3 py-2 rounded-lg text-xs font-medium border ${color.value} ${
-                        newCustomType.color === color.value ? 'ring-2 ring-blue-500' : ''
+                        newCustomType.color === color.value ? 'ring-2 ring-red-500' : ''
                       }`}
                     >
                       {color.name}
@@ -702,7 +702,7 @@ export function Calendar() {
                     setNewCustomType({name: '', color: 'bg-slate-100 text-slate-700 border-slate-300'});
                   }
                 }}
-                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium"
               >
                 Добавить
               </button>

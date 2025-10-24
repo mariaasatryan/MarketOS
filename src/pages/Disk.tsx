@@ -478,7 +478,7 @@ export function Disk() {
               console.log('Add file button clicked');
               setShowAddModal(true);
             }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
+          className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 font-medium"
         >
           <Plus size={20} />
           Добавить файл
@@ -494,7 +494,7 @@ export function Disk() {
             placeholder="Поиск файлов..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-red-500 focus:border-transparent"
           />
         </div>
       </div>
@@ -509,7 +509,7 @@ export function Disk() {
             }}
             className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors flex items-center gap-2 ${
               selectedCategory === category.id
-                ? 'bg-blue-600 text-white'
+                ? 'bg-red-600 text-white'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
             }`}
           >
@@ -562,7 +562,7 @@ export function Disk() {
                           console.log('View folder files clicked:', folder.id);
                           setSelectedCategory(folder.id);
                         }}
-                        className="w-full text-left text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
+                        className="w-full text-left text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium"
                       >
                         Просмотреть файлы →
                       </button>
@@ -596,7 +596,7 @@ export function Disk() {
                     <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">{link.description}</p>
                   )}
                 </div>
-                <FolderOpen className="text-blue-600 dark:text-blue-400" size={24} />
+                <FolderOpen className="text-red-600 dark:text-red-400" size={24} />
               </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -605,7 +605,7 @@ export function Disk() {
                         setEditingLink(link);
                         setShowEditModal(true);
                       }}
-                      className="p-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                      className="p-2 text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                     >
                 <Edit2 size={16} />
               </button>
@@ -624,7 +624,7 @@ export function Disk() {
                       console.log('Open link button clicked:', link.url);
                       handleOpenLink(link.url);
                     }}
-                    className="w-full mt-3 inline-flex items-center justify-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                    className="w-full mt-3 inline-flex items-center justify-center gap-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
                   >
                     <ExternalLink size={16} />
                     Открыть
@@ -660,7 +660,7 @@ export function Disk() {
                     console.log('Name input changed:', e.target.value);
                     setNewLink({ ...newLink, name: e.target.value });
                   }}
-                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -685,7 +685,7 @@ export function Disk() {
                   onInput={(e) => {
                     console.log('URL input event:', e.currentTarget.value);
                   }}
-                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Можно вводить с https:// или без него
@@ -701,7 +701,7 @@ export function Disk() {
                     console.log('Folder select changed:', e.target.value);
                     setNewLink({ ...newLink, folder_id: e.target.value });
                   }}
-                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 >
                   <option value="">Без папки</option>
                   {categories.slice(1, -1).map(category => (
@@ -723,7 +723,7 @@ export function Disk() {
                     setNewLink({ ...newLink, description: e.target.value });
                   }}
                   rows={2}
-                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
               </div>
               <div className="flex gap-3 pt-4">
@@ -733,7 +733,7 @@ export function Disk() {
                     handleAddLink();
                   }}
                   disabled={!newLink.name || !newLink.url}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Добавить
                 </button>
@@ -769,7 +769,7 @@ export function Disk() {
                     console.log('Edit name input changed:', e.target.value);
                     setEditingLink({...editingLink, name: e.target.value});
                   }}
-                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -794,7 +794,7 @@ export function Disk() {
                   onInput={(e) => {
                     console.log('Edit URL input event:', e.currentTarget.value);
                   }}
-                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Можно вводить с https:// или без него
@@ -810,7 +810,7 @@ export function Disk() {
                     console.log('Edit folder select changed:', e.target.value);
                     setEditingLink({...editingLink, folder_id: e.target.value});
                   }}
-                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 >
                   <option value="">Без папки</option>
                   {categories.slice(1, -1).map(category => (
@@ -832,7 +832,7 @@ export function Disk() {
                     setEditingLink({...editingLink, description: e.target.value});
                   }}
                   rows={2}
-                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
               </div>
               <div className="flex gap-3 pt-4">
@@ -842,7 +842,7 @@ export function Disk() {
                     handleUpdateLink();
                   }}
                   disabled={!editingLink.name || !editingLink.url}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Сохранить
                 </button>

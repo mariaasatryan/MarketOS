@@ -43,7 +43,7 @@ export function Reviews() {
               value={reply[r.id] || ''}
               onChange={(e) => setReply((s) => ({ ...s, [r.id]: e.target.value }))}
             />
-            <button className="w-full bg-blue-600 text-white rounded-lg px-3 py-2 flex items-center justify-center gap-2"
+            <button className="w-full bg-red-600 text-white rounded-lg px-3 py-2 flex items-center justify-center gap-2"
               onClick={() => sendReply(r.id)}
             >
               <Send size={16} /> Отправить

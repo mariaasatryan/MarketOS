@@ -131,52 +131,52 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
           onClick={() => setActiveTab('integrations')}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'integrations'
-              ? 'text-blue-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-blue-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           {t('settings.integrations')}
           {activeTab === 'integrations' && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400" />
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 dark:bg-blue-400" />
           )}
         </button>
         <button
           onClick={() => setActiveTab('appearance')}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'appearance'
-              ? 'text-blue-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-blue-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           {t('settings.appearance')}
           {activeTab === 'appearance' && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400" />
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 dark:bg-blue-400" />
           )}
         </button>
         <button
           onClick={() => setActiveTab('team')}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'team'
-              ? 'text-blue-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-blue-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           Команда
           {activeTab === 'team' && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400" />
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 dark:bg-blue-400" />
           )}
         </button>
         <button
           onClick={() => setActiveTab('profile')}
           className={`px-4 py-2 font-medium transition-colors relative ${
             activeTab === 'profile'
-              ? 'text-blue-600 dark:text-blue-400'
+              ? 'text-red-600 dark:text-blue-400'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           {t('settings.profile')}
           {activeTab === 'profile' && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400" />
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 dark:bg-blue-400" />
           )}
         </button>
       </div>
@@ -200,7 +200,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
                         : 'border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
                     }`}
                   >
-                    <Sun size={24} className={theme === 'light' ? 'text-blue-600' : 'text-slate-600 dark:text-slate-400'} />
+                    <Sun size={24} className={theme === 'light' ? 'text-red-600' : 'text-slate-600 dark:text-slate-400'} />
                     <div className="text-left">
                       <div className={`font-medium ${theme === 'light' ? 'text-blue-700 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300'}`}>
                         {t('settings.light')}
@@ -217,7 +217,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
                         : 'border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
                     }`}
                   >
-                    <Moon size={24} className={theme === 'dark' ? 'text-blue-600 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400'} />
+                    <Moon size={24} className={theme === 'dark' ? 'text-red-600 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400'} />
                     <div className="text-left">
                       <div className={`font-medium ${theme === 'dark' ? 'text-blue-700 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300'}`}>
                         {t('settings.dark')}
@@ -241,7 +241,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
                         : 'border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
                     }`}
                   >
-                    <Globe size={24} className={language === 'ru' ? 'text-blue-600 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400'} />
+                    <Globe size={24} className={language === 'ru' ? 'text-red-600 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400'} />
                     <div className="text-left">
                       <div className={`font-medium ${language === 'ru' ? 'text-blue-700 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300'}`}>
                         Русский
@@ -258,7 +258,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
                         : 'border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
                     }`}
                   >
-                    <Globe size={24} className={language === 'en' ? 'text-blue-600 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400'} />
+                    <Globe size={24} className={language === 'en' ? 'text-red-600 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400'} />
                     <div className="text-left">
                       <div className={`font-medium ${language === 'en' ? 'text-blue-700 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300'}`}>
                         English
@@ -277,7 +277,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
                   onClick={() => setIsEditMode(!isEditMode)}
                   className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-medium transition-all ${
                     isEditMode
-                      ? 'bg-blue-600 text-white hover:bg-blue-700'
+                      ? 'bg-red-600 text-white hover:bg-blue-700'
                       : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
                   }`}
                 >
@@ -308,7 +308,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
             </div>
             <button
               onClick={() => setShowAddModal(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
             >
               <Plus size={20} />
               {t('settings.addMarketplace')}
@@ -439,7 +439,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
                   <button
                     onClick={handleAddIntegration}
                     disabled={loading || !apiKey.trim()}
-                    className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? 'Сохранение...' : 'Добавить'}
                   </button>
@@ -458,7 +458,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
               <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Управление доступом сотрудников</p>
             </div>
             <button
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
             >
               <Plus size={20} />
               Добавить сотрудника
@@ -480,7 +480,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
                   <tr key={employee.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-semibold">
+                        <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-red-600 dark:text-blue-400 font-semibold">
                           {employee.name.charAt(0)}
                         </div>
                         <div className="ml-4">
@@ -516,7 +516,7 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
             <h2 className="text-xl font-semibold text-slate-800 dark:text-white mb-6">{t('settings.profile')}</h2>
 
             <div className="flex items-center gap-6 mb-6 pb-6 border-b border-slate-200 dark:border-slate-700">
-              <div className="w-20 h-20 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 text-2xl font-semibold">
+              <div className="w-20 h-20 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-red-600 dark:text-blue-400 text-2xl font-semibold">
                 <User size={32} />
               </div>
               <div>

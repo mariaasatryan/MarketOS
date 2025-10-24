@@ -147,7 +147,7 @@ export function Advertising() {
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
+          className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
         >
           <Plus size={20} />
           Создать кампанию
@@ -158,7 +158,7 @@ export function Advertising() {
         <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
           <div className="flex items-center justify-between mb-2">
             <span className="text-slate-600 dark:text-slate-400 text-sm">Общий бюджет</span>
-            <TrendingUp className="text-blue-600 dark:text-blue-400" size={20} />
+            <TrendingUp className="text-red-600 dark:text-blue-400" size={20} />
           </div>
           <p className="text-2xl font-bold text-slate-800 dark:text-white">{totalBudget.toLocaleString('ru-RU')} ₽</p>
         </div>
@@ -190,7 +190,7 @@ export function Advertising() {
           <p className="text-slate-600 dark:text-slate-400 mb-4">Создайте первую кампанию для отслеживания рекламы</p>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
             Создать кампанию
           </button>
@@ -249,7 +249,7 @@ export function Advertising() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleToggleStatus(campaign.id, campaign.status)}
-                        className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
+                        className="text-red-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
                       >
                         {campaign.status === 'active' ? 'Пауза' : 'Запустить'}
                       </button>
@@ -301,7 +301,7 @@ export function Advertising() {
                 <button
                   onClick={handleCreateCampaign}
                   disabled={!newCampaign.name || !newCampaign.budget}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Создать
                 </button>

@@ -85,7 +85,7 @@ export function Products() {
             {syncing ? 'Синхронизация...' : 'Синхронизировать'}
           </button>
         )}
-        <button className="ml-auto bg-blue-600 text-white px-3 py-2 rounded-lg" onClick={() => setOpen(true)}>
+        <button className="ml-auto bg-red-600 text-white px-3 py-2 rounded-lg" onClick={() => setOpen(true)}>
           <Plus size={16} className="inline mr-1" /> Добавить
         </button>
       </div>
@@ -116,7 +116,7 @@ export function Products() {
             <input className="w-full border rounded-lg px-3 py-2" placeholder="Цена" type="number" value={price} onChange={(e) => setPrice(Number(e.target.value))} />
             <div className="flex gap-2">
               <button className="flex-1 border rounded-lg px-3 py-2" onClick={() => setOpen(false)}>Отмена</button>
-              <button className="flex-1 bg-blue-600 text-white rounded-lg px-3 py-2" onClick={create} disabled={loading}>
+              <button className="flex-1 bg-red-600 text-white rounded-lg px-3 py-2" onClick={create} disabled={loading}>
                 {loading ? 'Создание…' : 'Создать'}
               </button>
             </div>
