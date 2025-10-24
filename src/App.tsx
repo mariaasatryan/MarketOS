@@ -12,6 +12,8 @@ import { Products } from './pages/Products';
 import { Reviews } from './pages/Reviews';
 import { Advertising } from './pages/Advertising';
 import { Analytics } from './pages/Analytics';
+import { DailyReports } from './pages/DailyReports';
+import { InventoryManagement } from './pages/InventoryManagement';
 import { Calendar } from './pages/Calendar';
 import { Sheets } from './pages/Sheets';
 import { Disk } from './pages/Disk';
@@ -35,6 +37,10 @@ function AppContent() {
         return <Advertising />;
       case 'analytics':
         return <Analytics />;
+      case 'daily-reports':
+        return <DailyReports />;
+      case 'inventory':
+        return <InventoryManagement />;
       case 'calendar':
         return <Calendar />;
       case 'sheets':

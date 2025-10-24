@@ -10,7 +10,9 @@ import {
   Settings,
   LogOut,
   Sparkles,
-  HardDrive
+  HardDrive,
+  FileText,
+  Warehouse
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { Logo } from './Logo';
@@ -27,6 +29,8 @@ const menuItems = [
   { id: 'reviews', label: 'Отзывы', icon: MessageSquare },
   { id: 'advertising', label: 'Реклама', icon: Megaphone },
   { id: 'analytics', label: 'Аналитика', icon: BarChart3 },
+  { id: 'daily-reports', label: 'Ежедневные отчеты', icon: FileText },
+  { id: 'inventory', label: 'Остатки', icon: Warehouse },
   { id: 'calendar', label: 'Календарь', icon: Calendar },
   { id: 'sheets', label: 'Таблицы', icon: FileSpreadsheet },
   { id: 'settings', label: 'Настройки', icon: Settings },
