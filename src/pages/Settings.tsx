@@ -41,8 +41,11 @@ export function Settings({ isEditMode, setIsEditMode }: SettingsProps) {
   const loadIntegrations = async () => {
     setError(null);
     try {
+      // Принудительно загружаем интеграции из Supabase
+      await marketplaceService.refreshIntegrations();
       const data = await marketplaceService.listIntegrations();
       setIntegrations(data);
+      console.log('📦 Интеграции загружены:', data);
     } catch (e: any) {
       setError(e.message ?? String(e));
     }

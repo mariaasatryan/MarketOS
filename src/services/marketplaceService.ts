@@ -29,6 +29,124 @@ export interface ServiceError {
 class MarketplaceService {
   private integrations: MarketplaceIntegration[] = [];
 
+  constructor() {
+    // Загружаем интеграции при инициализации
+    this.initializeIntegrations();
+  }
+
+  private async initializeIntegrations() {
+    await this.loadIntegrationsFromStorage();
+  }
+
+  private async loadIntegrationsFromStorage() {
+    try {
+      // Сначала пытаемся загрузить из Supabase
+      await this.loadIntegrationsFromSupabase();
+      
+      // Если в Supabase нет данных, загружаем из localStorage
+      if (this.integrations.length === 0) {
+        const stored = localStorage.getItem('marketplace_integrations');
+        if (stored) {
+          this.integrations = JSON.parse(stored);
+          console.log('📦 Загружены интеграции из localStorage:', this.integrations);
+        }
+      }
+    } catch (error) {
+      console.error('❌ Ошибка загрузки интеграций:', error);
+      this.integrations = [];
+    }
+  }
+
+  private async loadIntegrationsFromSupabase() {
+    try {
+      console.log('📦 Загрузка интеграций из Supabase...');
+      
+      // Получаем текущего пользователя
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        console.log('❌ Пользователь не авторизован, пропускаем загрузку из Supabase');
+        return;
+      }
+
+      // Загружаем интеграции пользователя
+      const { data, error } = await supabase
+        .from('marketplace_integrations')
+        .select('*')
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('❌ Ошибка загрузки интеграций из Supabase:', error);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        this.integrations = data;
+        console.log('✅ Интеграции загружены из Supabase:', this.integrations);
+      } else {
+        console.log('📦 Нет интеграций в Supabase');
+      }
+    } catch (error) {
+      console.error('❌ Ошибка загрузки из Supabase:', error);
+    }
+  }
+
+  private async saveIntegrationsToStorage() {
+    try {
+      // Сохраняем в localStorage для быстрого доступа
+      localStorage.setItem('marketplace_integrations', JSON.stringify(this.integrations));
+      console.log('💾 Интеграции сохранены в localStorage:', this.integrations);
+      
+      // Сохраняем в Supabase для постоянного хранения
+      await this.saveIntegrationsToSupabase();
+    } catch (error) {
+      console.error('❌ Ошибка сохранения интеграций:', error);
+    }
+  }
+
+  private async saveIntegrationsToSupabase() {
+    try {
+      console.log('💾 Сохранение интеграций в Supabase...');
+      
+      // Получаем текущего пользователя
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        console.log('❌ Пользователь не авторизован, пропускаем сохранение в Supabase');
+        return;
+      }
+
+      // Удаляем старые интеграции пользователя
+      const { error: deleteError } = await supabase
+        .from('marketplace_integrations')
+        .delete()
+        .eq('user_id', user.id);
+
+      if (deleteError) {
+        console.error('❌ Ошибка удаления старых интеграций:', deleteError);
+      }
+
+      // Добавляем новые интеграции
+      if (this.integrations.length > 0) {
+        const integrationsToSave = this.integrations.map(integration => ({
+          ...integration,
+          user_id: user.id,
+          created_at: new Date().toISOString()
+        }));
+
+        const { error: insertError } = await supabase
+          .from('marketplace_integrations')
+          .insert(integrationsToSave);
+
+        if (insertError) {
+          console.error('❌ Ошибка сохранения интеграций в Supabase:', insertError);
+        } else {
+          console.log('✅ Интеграции сохранены в Supabase');
+        }
+      }
+    } catch (error) {
+      console.error('❌ Ошибка сохранения в Supabase:', error);
+    }
+  }
+
   private async getAuthHeaders() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -67,9 +185,16 @@ class MarketplaceService {
       if (!res.ok) throw new Error(await res.text());
       return res.json();
     } catch {
-      // Возвращаем мок-данные для демонстрации
+      // Загружаем интеграции из Supabase, если они есть
+      await this.loadIntegrationsFromSupabase();
       return this.integrations;
     }
+  }
+
+  // Метод для принудительной загрузки интеграций из Supabase
+  async refreshIntegrations(): Promise<void> {
+    console.log('🔄 Принудительная загрузка интеграций из Supabase...');
+    await this.loadIntegrationsFromSupabase();
   }
 
   async addIntegration(marketplace: MarketplaceCode, apiKey: string, clientId?: string): Promise<MarketplaceIntegration> {
@@ -110,6 +235,9 @@ class MarketplaceService {
       };
       
       this.integrations.push(newIntegration);
+      // Сохраняем в localStorage и Supabase
+      await this.saveIntegrationsToStorage();
+      console.log('✅ Интеграция добавлена и сохранена:', newIntegration);
       return newIntegration;
     }
   }
