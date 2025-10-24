@@ -52,18 +52,20 @@ export class RealMarketplaceService {
     }
   }
 
-  // Wildberries API методы
+  // Wildberries API методы (обновлено согласно официальной документации)
   static async getWBOrders(apiToken: string, dateFrom: string, dateTo: string) {
     try {
+      // Согласно документации WB API - используем правильный эндпоинт для заказов
       const response = await this.makeRequest(
         `https://suppliers-api.wildberries.ru/api/v3/orders?dateFrom=${dateFrom}&dateTo=${dateTo}`,
         {
           headers: {
-            'Authorization': apiToken,
+            'Authorization': `Bearer ${apiToken}`,
+            'Content-Type': 'application/json',
           },
         }
       );
-      return response.data || [];
+      return response.orders || response.data || [];
     } catch (error) {
       console.error('WB Orders API error:', error);
       return [];
@@ -72,17 +74,17 @@ export class RealMarketplaceService {
 
   static async getWBWarehouses(apiToken: string) {
     try {
-      // Получаем список складов продавца
+      // Согласно документации WB API - правильный эндпоинт для складов
       const response = await this.makeRequest(
         'https://suppliers-api.wildberries.ru/api/v3/warehouses',
         {
           headers: {
-            'Authorization': apiToken,
+            'Authorization': `Bearer ${apiToken}`,
             'Content-Type': 'application/json',
           },
         }
       );
-      return response.data || [];
+      return response.warehouses || response.data || [];
     } catch (error) {
       console.error('WB Warehouses API error:', error);
       return [];
@@ -91,33 +93,17 @@ export class RealMarketplaceService {
 
   static async getWBStocks(apiToken: string) {
     try {
-      // Сначала получаем список складов
-      const warehouses = await this.getWBWarehouses(apiToken);
-      const allStocks = [];
-
-      // Для каждого склада получаем остатки
-      for (const warehouse of warehouses) {
-        try {
-          const response = await this.makeRequest(
-            `https://marketplace-api.wildberries.ru/api/v3/stocks/${warehouse.id}`,
-            {
-              method: 'POST',
-              headers: {
-                'Authorization': apiToken,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                skus: [] // Пустой массив для получения всех остатков
-              }),
-            }
-          );
-          allStocks.push(...(response.stocks || []));
-        } catch (error) {
-          console.error(`Error fetching stocks for warehouse ${warehouse.id}:`, error);
+      // Согласно документации WB API - используем правильный эндпоинт для остатков
+      const response = await this.makeRequest(
+        'https://suppliers-api.wildberries.ru/api/v3/stocks',
+        {
+          headers: {
+            'Authorization': `Bearer ${apiToken}`,
+            'Content-Type': 'application/json',
+          },
         }
-      }
-
-      return allStocks;
+      );
+      return response.stocks || response.data || [];
     } catch (error) {
       console.error('WB Stocks API error:', error);
       return [];
@@ -126,27 +112,17 @@ export class RealMarketplaceService {
 
   static async getWBProducts(apiToken: string) {
     try {
+      // Согласно документации WB API - используем правильный эндпоинт для товаров
       const response = await this.makeRequest(
-        'https://content-api.wildberries.ru/content/v2/get/cards/list',
+        'https://suppliers-api.wildberries.ru/api/v3/cards',
         {
-          method: 'POST',
           headers: {
-            'Authorization': apiToken,
+            'Authorization': `Bearer ${apiToken}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            sort: {
-              cursor: {
-                limit: 1000
-              },
-              filter: {
-                withPhoto: -1
-              }
-            }
-          }),
         }
       );
-      return response.data?.cards || [];
+      return response.cards || response.data || [];
     } catch (error) {
       console.error('WB Products API error:', error);
       return [];

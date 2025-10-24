@@ -23,7 +23,7 @@ export class WildberriesAdapter implements MarketplaceAdapter {
 
   private getHeaders() {
     return {
-      'Authorization': this.token,
+      'Authorization': `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     };
   }
@@ -127,34 +127,14 @@ export class WildberriesAdapter implements MarketplaceAdapter {
 
   async getStocks(): Promise<any[]> {
     try {
-      // Сначала получаем список складов
-      const warehousesResponse = await apiClient.request({
-        url: `${WB_API_BASE}/api/v3/warehouses`,
+      // Согласно документации WB API - используем правильный эндпоинт для остатков
+      const response = await apiClient.request({
+        url: `${WB_API_BASE}/api/v3/stocks`,
         method: 'GET',
         headers: this.getHeaders(),
       });
 
-      const warehouses = warehousesResponse.data || [];
-      const allStocks = [];
-
-      // Для каждого склада получаем остатки
-      for (const warehouse of warehouses) {
-        try {
-          const stocksResponse = await apiClient.request({
-            url: `https://marketplace-api.wildberries.ru/api/v3/stocks/${warehouse.id}`,
-            method: 'POST',
-            headers: this.getHeaders(),
-            data: {
-              skus: [] // Пустой массив для получения всех остатков
-            },
-          });
-          allStocks.push(...(stocksResponse.stocks || []));
-        } catch (error) {
-          console.error(`Error fetching stocks for warehouse ${warehouse.id}:`, error);
-        }
-      }
-
-      return allStocks;
+      return response.data?.stocks || response.data || [];
     } catch (error) {
       console.error('WB getStocks error:', error);
       return [];
@@ -163,24 +143,14 @@ export class WildberriesAdapter implements MarketplaceAdapter {
 
   async getProducts(): Promise<Product[]> {
     try {
-      // Используем правильный эндпоинт для получения карточек товаров
+      // Согласно документации WB API - используем правильный эндпоинт для товаров
       const response = await apiClient.request({
-        url: 'https://content-api.wildberries.ru/content/v2/get/cards/list',
-        method: 'POST',
+        url: `${WB_API_BASE}/api/v3/cards`,
+        method: 'GET',
         headers: this.getHeaders(),
-        data: {
-          sort: {
-            cursor: {
-              limit: 1000
-            },
-            filter: {
-              withPhoto: -1
-            }
-          }
-        },
       });
 
-      const products = response.data?.cards || [];
+      const products = response.data?.cards || response.data || [];
       
       return products.map((product: any) => ({
         id: product.nmID?.toString() || product.id,
