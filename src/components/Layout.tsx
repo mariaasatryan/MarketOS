@@ -12,7 +12,8 @@ import {
   Sparkles,
   HardDrive,
   FileText,
-  Warehouse
+  Warehouse,
+  TestTube
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { Logo } from './Logo';
@@ -36,6 +37,7 @@ const menuItems = [
   { id: 'settings', label: 'Настройки', icon: Settings },
   { id: 'disk', label: 'Диск', icon: HardDrive },
   { id: 'ai', label: 'ИИ-Инструменты', icon: Sparkles },
+  { id: 'api-test', label: 'Тест API', icon: TestTube },
 ];
 
 export function Layout({ children, currentPage, onNavigate }: LayoutProps) {

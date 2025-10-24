@@ -53,21 +53,50 @@ export class RealMarketplaceService {
   }
 
   // Wildberries API методы (обновлено согласно официальной документации)
+  static async validateWBToken(apiToken: string) {
+    try {
+      console.log('🔍 WB Token Validation - проверка токена');
+      
+      const response = await this.makeRequest(
+        'https://suppliers-api.wildberries.ru/api/v3/supplies',
+        {
+          headers: {
+            'Authorization': apiToken,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      console.log('✅ WB Token Validation - токен валиден:', response);
+      return true;
+    } catch (error) {
+      console.error('❌ WB Token Validation - токен невалиден:', error);
+      return false;
+    }
+  }
+
   static async getWBOrders(apiToken: string, dateFrom: string, dateTo: string) {
     try {
+      console.log('🔍 WB Orders API - запрос:', { dateFrom, dateTo });
+      
       // Согласно документации WB API - используем правильный эндпоинт для заказов
       const response = await this.makeRequest(
         `https://suppliers-api.wildberries.ru/api/v3/orders?dateFrom=${dateFrom}&dateTo=${dateTo}`,
         {
           headers: {
-            'Authorization': `Bearer ${apiToken}`,
+            'Authorization': apiToken, // Попробуем без Bearer
             'Content-Type': 'application/json',
           },
         }
       );
-      return response.orders || response.data || [];
+      
+      console.log('📦 WB Orders API - ответ:', response);
+      const orders = response.orders || response.data || [];
+      console.log('📦 WB Orders API - заказы:', orders.length);
+      
+      return orders;
     } catch (error) {
-      console.error('WB Orders API error:', error);
+      console.error('❌ WB Orders API error:', error);
       return [];
     }
   }
@@ -112,19 +141,26 @@ export class RealMarketplaceService {
 
   static async getWBProducts(apiToken: string) {
     try {
+      console.log('🔍 WB Products API - запрос товаров');
+      
       // Согласно документации WB API - используем правильный эндпоинт для товаров
       const response = await this.makeRequest(
-        'https://suppliers-api.wildberries.ru/api/v3/cards',
+        'https://suppliers-api.wildberries.ru/api/v2/cards/list',
         {
           headers: {
-            'Authorization': `Bearer ${apiToken}`,
+            'Authorization': apiToken, // Попробуем без Bearer
             'Content-Type': 'application/json',
           },
         }
       );
-      return response.cards || response.data || [];
+      
+      console.log('📦 WB Products API - ответ:', response);
+      const products = response.cards || response.data || [];
+      console.log('📦 WB Products API - товары:', products.length);
+      
+      return products;
     } catch (error) {
-      console.error('WB Products API error:', error);
+      console.error('❌ WB Products API error:', error);
       return [];
     }
   }
@@ -530,7 +566,12 @@ export class RealMarketplaceService {
 
   // Метод для получения реальных данных аналитики
   static async getRealAnalyticsData(integrations: MarketplaceIntegration[]): Promise<any[]> {
-    if (integrations.length === 0) return [];
+    console.log('🔍 getRealAnalyticsData - интеграции:', integrations);
+    
+    if (integrations.length === 0) {
+      console.log('❌ getRealAnalyticsData - нет активных интеграций');
+      return [];
+    }
 
     const data: any[] = [];
     const days = 30;
@@ -550,7 +591,9 @@ export class RealMarketplaceService {
         try {
           switch (integration.marketplace) {
             case 'wildberries':
+              console.log('🔍 WB Analytics - получение данных за:', dateStr);
               const wbSales = await this.getWBSales(integration.api_token, dateStr, dateStr);
+              console.log('📦 WB Analytics - продажи:', wbSales.length, wbSales);
               totalOrders += wbSales.length;
               totalRevenue += wbSales.reduce((sum: number, sale: any) => sum + (sale.finishedPrice || 0), 0);
               break;
@@ -587,7 +630,12 @@ export class RealMarketplaceService {
 
   // Метод для получения реальных данных товаров
   static async getRealProductsData(integrations: MarketplaceIntegration[]): Promise<any[]> {
-    if (integrations.length === 0) return [];
+    console.log('🔍 getRealProductsData - интеграции:', integrations);
+    
+    if (integrations.length === 0) {
+      console.log('❌ getRealProductsData - нет активных интеграций');
+      return [];
+    }
 
     const allProducts: any[] = [];
 
@@ -597,8 +645,13 @@ export class RealMarketplaceService {
       try {
         switch (integration.marketplace) {
           case 'wildberries':
+            console.log('🔍 WB Products - получение товаров');
             const wbProducts = await this.getWBProducts(integration.api_token);
+            console.log('📦 WB Products - товары:', wbProducts.length, wbProducts);
+            
+            console.log('🔍 WB Stocks - получение остатков');
             const wbStocks = await this.getWBStocks(integration.api_token);
+            console.log('📦 WB Stocks - остатки:', wbStocks.length, wbStocks);
             
             // Создаем карту остатков
             const stocksMap = new Map();
