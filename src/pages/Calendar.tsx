@@ -63,6 +63,22 @@ export function Calendar() {
     }
   }, [user]);
 
+  // Обновляем календарь каждый день в полночь
+  useEffect(() => {
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    
+    const timeUntilMidnight = tomorrow.getTime() - now.getTime();
+    
+    const timeoutId = setTimeout(() => {
+      setCurrentDate(new Date());
+    }, timeUntilMidnight);
+    
+    return () => clearTimeout(timeoutId);
+  }, []);
+
   const loadEvents = async () => {
     try {
       setLoading(true);
@@ -281,6 +297,12 @@ export function Calendar() {
               >
                 <ChevronRight size={20} />
               </button>
+              <button
+                onClick={() => setCurrentDate(new Date())}
+                className="px-3 py-1 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Сегодня
+              </button>
             </div>
           </div>
 
@@ -320,7 +342,7 @@ export function Calendar() {
             <div className="grid grid-cols-7 gap-2">
               {days.map((day, index) => {
                 const events = day ? getEventsForDate(day) : [];
-                const isToday = day === 6;
+                const isToday = day ? new Date().toDateString() === new Date(currentDate.getFullYear(), currentDate.getMonth(), day).toDateString() : false;
 
                 return (
                   <div
