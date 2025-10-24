@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DollarSign, ShoppingCart, Package, RefreshCw } from 'lucide-react';
+import { DollarSign, ShoppingCart, Package, RefreshCw, TrendingUp, TrendingDown, AlertTriangle, Target } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { marketplaceService } from '../services/marketplaceService';
 import { RealMarketplaceService } from '../services/realMarketplaceService';
@@ -10,6 +10,27 @@ interface SalesData {
   total_orders: number;
 }
 
+interface ProfitabilityAnalysis {
+  productId: string;
+  productName: string;
+  revenue: number;
+  costs: number;
+  profit: number;
+  profitMargin: number;
+  isLossMaking: boolean;
+  turnoverRate: number;
+  status: 'profitable' | 'loss' | 'low_turnover' | 'frozen';
+}
+
+interface FinancialMetrics {
+  totalRevenue: number;
+  totalCosts: number;
+  netProfit: number;
+  profitMargin: number;
+  forecastRevenue: number;
+  planCompletion: number;
+}
+
 export function Analytics() {
   const { user } = useAuth();
   const [period, setPeriod] = useState<'7d' | '30d' | '90d'>('7d');
@@ -18,6 +39,9 @@ export function Analytics() {
   const [loading, setLoading] = useState(true);
   const [integrations, setIntegrations] = useState<any[]>([]);
   const [syncing, setSyncing] = useState(false);
+  const [profitabilityAnalysis, setProfitabilityAnalysis] = useState<ProfitabilityAnalysis[]>([]);
+  const [financialMetrics, setFinancialMetrics] = useState<FinancialMetrics | null>(null);
+  const [alerts, setAlerts] = useState<string[]>([]);
 
   useEffect(() => {
     if (user) {
@@ -54,6 +78,18 @@ export function Analytics() {
         stock: product.stock,
       }));
       setTopProducts(topProducts);
+
+      // Анализ прибыльности товаров (функция Sirena AI)
+      const profitabilityData = await analyzeProfitability(realProductsData, realAnalyticsData);
+      setProfitabilityAnalysis(profitabilityData);
+
+      // Финансовые метрики
+      const financialData = calculateFinancialMetrics(realAnalyticsData, profitabilityData);
+      setFinancialMetrics(financialData);
+
+      // Предупреждения и алерты
+      const alertsData = generateAlerts(profitabilityData, financialData);
+      setAlerts(alertsData);
     } catch (error) {
       console.error('Error loading analytics:', error);
     } finally {
@@ -130,6 +166,68 @@ export function Analytics() {
           </button>
         </div>
       </div>
+
+      {/* Предупреждения и алерты (Sirena AI функционал) */}
+      {alerts.length > 0 && (
+        <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <AlertTriangle className="text-orange-600 dark:text-orange-400" size={20} />
+            <h3 className="font-semibold text-orange-800 dark:text-orange-300">Предупреждения</h3>
+          </div>
+          <div className="space-y-2">
+            {alerts.map((alert, index) => (
+              <div key={index} className="text-sm text-orange-700 dark:text-orange-300">
+                {alert}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Финансовые метрики (Sirena AI функционал) */}
+      {financialMetrics && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+            <div className="flex items-center gap-3 mb-2">
+              <DollarSign className="text-green-600 dark:text-green-400" size={24} />
+              <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Выручка</span>
+            </div>
+            <div className="text-2xl font-bold text-slate-800 dark:text-white">
+              {financialMetrics.totalRevenue.toLocaleString('ru-RU')} ₽
+            </div>
+          </div>
+          
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+            <div className="flex items-center gap-3 mb-2">
+              <TrendingUp className="text-red-600 dark:text-red-400" size={24} />
+              <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Прибыль</span>
+            </div>
+            <div className="text-2xl font-bold text-slate-800 dark:text-white">
+              {financialMetrics.netProfit.toLocaleString('ru-RU')} ₽
+            </div>
+          </div>
+          
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+            <div className="flex items-center gap-3 mb-2">
+              <Target className="text-blue-600 dark:text-blue-400" size={24} />
+              <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Маржа</span>
+            </div>
+            <div className="text-2xl font-bold text-slate-800 dark:text-white">
+              {financialMetrics.profitMargin.toFixed(1)}%
+            </div>
+          </div>
+          
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+            <div className="flex items-center gap-3 mb-2">
+              <TrendingUp className="text-purple-600 dark:text-purple-400" size={24} />
+              <span className="text-sm font-medium text-slate-600 dark:text-slate-400">План</span>
+            </div>
+            <div className="text-2xl font-bold text-slate-800 dark:text-white">
+              {financialMetrics.planCompletion.toFixed(1)}%
+            </div>
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <div className="flex justify-center py-12">
@@ -240,4 +338,80 @@ export function Analytics() {
       )}
     </div>
   );
+
+  // Функции анализа прибыльности (Sirena AI функционал)
+  const analyzeProfitability = async (products: any[], analyticsData: any[]): Promise<ProfitabilityAnalysis[]> => {
+    return products.map(product => {
+      const productAnalytics = analyticsData.find(item => item.productId === product.id) || {};
+      const revenue = productAnalytics.revenue || 0;
+      const costs = product.price * 0.3; // Примерная себестоимость 30% от цены
+      const profit = revenue - costs;
+      const profitMargin = revenue > 0 ? (profit / revenue) * 100 : 0;
+      const isLossMaking = profit < 0;
+      const turnoverRate = productAnalytics.turnoverRate || 0;
+      
+      let status: 'profitable' | 'loss' | 'low_turnover' | 'frozen' = 'profitable';
+      if (isLossMaking) status = 'loss';
+      else if (turnoverRate < 0.1) status = 'low_turnover';
+      else if (product.stock > 100 && turnoverRate < 0.05) status = 'frozen';
+
+      return {
+        productId: product.id,
+        productName: product.title,
+        revenue,
+        costs,
+        profit,
+        profitMargin,
+        isLossMaking,
+        turnoverRate,
+        status
+      };
+    });
+  };
+
+  const calculateFinancialMetrics = (analyticsData: any[], profitabilityData: ProfitabilityAnalysis[]): FinancialMetrics => {
+    const totalRevenue = analyticsData.reduce((sum, item) => sum + (item.revenue || 0), 0);
+    const totalCosts = profitabilityData.reduce((sum, item) => sum + item.costs, 0);
+    const netProfit = totalRevenue - totalCosts;
+    const profitMargin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
+    const forecastRevenue = totalRevenue * 1.15; // Прогноз +15%
+    const planCompletion = Math.min(100, (totalRevenue / (totalRevenue * 1.2)) * 100); // План на 20% больше
+
+    return {
+      totalRevenue,
+      totalCosts,
+      netProfit,
+      profitMargin,
+      forecastRevenue,
+      planCompletion
+    };
+  };
+
+  const generateAlerts = (profitabilityData: ProfitabilityAnalysis[], financialData: FinancialMetrics): string[] => {
+    const alerts: string[] = [];
+    
+    // Убыточные товары
+    const lossMakingProducts = profitabilityData.filter(item => item.isLossMaking);
+    if (lossMakingProducts.length > 0) {
+      alerts.push(`⚠️ ${lossMakingProducts.length} товаров приносят убытки`);
+    }
+
+    // Замороженные позиции
+    const frozenProducts = profitabilityData.filter(item => item.status === 'frozen');
+    if (frozenProducts.length > 0) {
+      alerts.push(`🧊 ${frozenProducts.length} товаров заморожены (низкая оборачиваемость)`);
+    }
+
+    // Низкая прибыльность
+    if (financialData.profitMargin < 10) {
+      alerts.push(`📉 Низкая прибыльность: ${financialData.profitMargin.toFixed(1)}%`);
+    }
+
+    // План не выполняется
+    if (financialData.planCompletion < 80) {
+      alerts.push(`📊 План выполнен на ${financialData.planCompletion.toFixed(1)}%`);
+    }
+
+    return alerts;
+  };
 }
