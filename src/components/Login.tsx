@@ -1,6 +1,7 @@
 // src/components/Login.tsx
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { Logo } from './Logo';
 
 export function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -44,15 +45,24 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen grid place-items-center p-6">
-      <form onSubmit={onSubmit} className="w-full max-w-md border rounded-2xl p-6 space-y-4">
-        <h1 className="text-xl font-semibold">{isLogin ? 'Вход' : 'Регистрация'}</h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 grid place-items-center p-6">
+      <div className="w-full max-w-md">
+        {/* Logo at top */}
+        <div className="text-center mb-8">
+          <Logo className="justify-center" />
+        </div>
+        
+        <form onSubmit={onSubmit} className="bg-white border border-slate-200 rounded-2xl p-8 space-y-6 shadow-lg">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-slate-800">{isLogin ? 'Вход в систему' : 'Регистрация'}</h1>
+            <p className="text-slate-600 mt-2">Управление маркетплейсами</p>
+          </div>
 
         {!isLogin && (
           <div>
-            <label className="block text-sm mb-1">Имя</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Имя</label>
             <input
-              className="w-full border rounded-lg px-3 py-2"
+              className="w-full border border-slate-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="Ваше имя"
@@ -61,9 +71,9 @@ export function Login() {
         )}
 
         <div>
-          <label className="block text-sm mb-1">Email</label>
+          <label className="block text-sm font-medium text-slate-700 mb-2">Email</label>
           <input
-            className="w-full border rounded-lg px-3 py-2"
+            className="w-full border border-slate-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -72,9 +82,9 @@ export function Login() {
         </div>
 
         <div>
-          <label className="block text-sm mb-1">Пароль</label>
+          <label className="block text-sm font-medium text-slate-700 mb-2">Пароль</label>
           <input
-            className="w-full border rounded-lg px-3 py-2"
+            className="w-full border border-slate-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -82,14 +92,14 @@ export function Login() {
           />
         </div>
 
-        {error && <div className="p-2 rounded bg-red-50 text-red-700 text-sm">{error}</div>}
+        {error && <div className="p-4 rounded-lg bg-red-50 text-red-700 text-sm border border-red-200">{error}</div>}
 
         {/* Google OAuth Button */}
         <button
           type="button"
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-3 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
+          className="w-full flex items-center justify-center gap-3 border border-slate-300 text-slate-700 px-4 py-3 rounded-lg hover:bg-slate-50 hover:border-red-300 hover:text-red-600 disabled:opacity-50 transition-all duration-200"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -102,17 +112,17 @@ export function Login() {
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300" />
+            <div className="w-full border-t border-slate-300" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">или</span>
+            <span className="px-3 bg-white text-slate-500">или</span>
           </div>
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          className="w-full bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors font-medium"
         >
           {loading ? 'Отправка…' : isLogin ? 'Войти' : 'Зарегистрироваться'}
         </button>
@@ -120,13 +130,14 @@ export function Login() {
         <div className="text-center">
           <button
             type="button"
-            className="text-blue-600 hover:text-blue-700 text-sm"
+            className="text-red-600 hover:text-red-700 text-sm font-medium transition-colors"
             onClick={() => setIsLogin((v) => !v)}
           >
             {isLogin ? 'Нет аккаунта? Зарегистрируйтесь' : 'Уже есть аккаунт? Войдите'}
           </button>
         </div>
       </form>
+      </div>
     </div>
   );
 }

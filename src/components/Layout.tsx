@@ -9,9 +9,11 @@ import {
   FileSpreadsheet,
   Settings,
   LogOut,
-  Sparkles
+  Sparkles,
+  HardDrive
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { Logo } from './Logo';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -28,7 +30,7 @@ const menuItems = [
   { id: 'calendar', label: 'Календарь', icon: Calendar },
   { id: 'sheets', label: 'Таблицы', icon: FileSpreadsheet },
   { id: 'settings', label: 'Настройки', icon: Settings },
-  { id: 'disk', label: 'Диск', icon: Settings }, // при желании поменяй иконку на Folder
+  { id: 'disk', label: 'Диск', icon: HardDrive },
   { id: 'ai', label: 'ИИ-Инструменты', icon: Sparkles },
 ];
 
@@ -37,10 +39,9 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
 
   return (
     <div className="flex h-screen bg-slate-50">
-      <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
+      <aside className="w-64 bg-white border-r border-slate-200 flex flex-col shadow-sm">
         <div className="p-6 border-b border-slate-200">
-          <h1 className="text-xl font-bold text-slate-800">Виртуальный менеджер</h1>
-          <p className="text-xs text-slate-500 mt-1">Управление маркетплейсами</p>
+          <Logo />
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
@@ -52,10 +53,10 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActive
-                    ? 'bg-blue-50 text-blue-700 font-medium'
-                    : 'text-slate-700 hover:bg-slate-50'
+                    ? 'bg-red-50 text-red-700 font-medium border-l-4 border-red-600'
+                    : 'text-slate-700 hover:bg-slate-50 hover:text-red-600'
                 }`}
               >
                 <Icon size={20} />
@@ -68,7 +69,7 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
         <div className="p-4 border-t border-slate-200">
           <button
             onClick={signOut}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
           >
             <LogOut size={20} />
             <span>Выйти</span>
@@ -76,7 +77,7 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto bg-gradient-to-br from-slate-50 to-slate-100">
         <div className="p-8">
           {children}
         </div>
