@@ -48,12 +48,17 @@ export function APITest() {
         };
         
         try {
-          // Тестируем токен
+          // Тестируем подключение к API
           if (integration.marketplace === 'wildberries') {
-            console.log('🔑 Тестируем WB токен...');
-            const isValid = await RealMarketplaceService.validateWBToken(integration.api_token);
-            integrationTest.results.tokenValidation = isValid;
-            console.log('🔑 WB токен валиден:', isValid);
+            console.log('🔑 Тестируем WB подключение...');
+            const connectionTest = await RealMarketplaceService.testWBConnection(integration.api_token);
+            integrationTest.results.tokenValidation = {
+              success: connectionTest.success,
+              message: connectionTest.message,
+              status: connectionTest.status,
+              timestamp: connectionTest.timestamp
+            };
+            console.log('🔑 WB подключение:', connectionTest);
           }
           
           // Тестируем товары
@@ -191,7 +196,7 @@ export function APITest() {
                   <h5 className="font-medium text-slate-800 dark:text-white mb-2">Токен</h5>
                   <div className="flex items-center gap-2">
                     {test.results.tokenValidation !== null ? (
-                      test.results.tokenValidation ? (
+                      test.results.tokenValidation.success ? (
                         <CheckCircle className="text-green-500" size={16} />
                       ) : (
                         <XCircle className="text-red-500" size={16} />
@@ -199,11 +204,25 @@ export function APITest() {
                     ) : (
                       <AlertTriangle className="text-yellow-500" size={16} />
                     )}
-                    <span className="text-sm text-slate-600 dark:text-slate-400">
-                      {test.results.tokenValidation !== null ? 
-                        (test.results.tokenValidation ? 'Валиден' : 'Невалиден') : 
-                        'Не тестировался'}
-                    </span>
+                    <div className="text-sm text-slate-600 dark:text-slate-400">
+                      {test.results.tokenValidation !== null ? (
+                        <div>
+                          <div className="font-medium">
+                            {test.results.tokenValidation.success ? 'Подключение успешно' : 'Ошибка подключения'}
+                          </div>
+                          <div className="text-xs text-slate-500">
+                            {test.results.tokenValidation.message}
+                          </div>
+                          {test.results.tokenValidation.status && (
+                            <div className="text-xs text-slate-500">
+                              Статус: {test.results.tokenValidation.status}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        'Не тестировался'
+                      )}
+                    </div>
                   </div>
                 </div>
 

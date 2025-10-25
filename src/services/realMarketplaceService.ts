@@ -58,7 +58,7 @@ export class RealMarketplaceService {
       console.log('🔍 WB Token Validation - проверка токена');
       
       const response = await this.makeRequest(
-        'https://suppliers-api.wildberries.ru/api/v3/supplies',
+        'https://suppliers-api.wildberries.ru/ping',
         {
           headers: {
             'Authorization': apiToken,
@@ -72,6 +72,36 @@ export class RealMarketplaceService {
     } catch (error) {
       console.error('❌ WB Token Validation - токен невалиден:', error);
       return false;
+    }
+  }
+
+  // Проверка подключения к WB API (официальный метод /ping)
+  static async testWBConnection(apiToken: string) {
+    try {
+      console.log('🔍 WB Connection Test - проверка подключения к API');
+      const response = await this.makeRequest(
+        'https://suppliers-api.wildberries.ru/ping',
+        {
+          headers: {
+            'Authorization': apiToken,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log('✅ WB Connection Test - подключение успешно:', response);
+      return {
+        success: true,
+        status: response.Status || 'OK',
+        timestamp: response.TS || new Date().toISOString(),
+        message: 'Подключение к WB API успешно'
+      };
+    } catch (error: any) {
+      console.error('❌ WB Connection Test - ошибка подключения:', error);
+      return {
+        success: false,
+        error: error.message,
+        message: 'Ошибка подключения к WB API'
+      };
     }
   }
 
