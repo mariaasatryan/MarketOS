@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { getMarketplaceColors, getSyncButtonColors } from '../utils/marketplaceColors';
+import MarketplaceBadge from '../components/MarketplaceBadge';
+import SyncButton from '../components/SyncButton';
 
 interface PnLData {
   group: string;
@@ -116,12 +119,17 @@ const PnLReport: React.FC = () => {
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900">P&L Отчет</h1>
-        <button
-          onClick={exportToCSV}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Экспорт в CSV
-        </button>
+        <div className="flex space-x-4">
+          <SyncButton onClick={() => window.location.reload()}>
+            Синхронизировать
+          </SyncButton>
+          <button
+            onClick={exportToCSV}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Экспорт в CSV
+          </button>
+        </div>
       </div>
 
       {/* Filters */}

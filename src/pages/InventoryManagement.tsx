@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { getMarketplaceColors, getSyncButtonColors } from '../utils/marketplaceColors';
+import MarketplaceBadge from '../components/MarketplaceBadge';
+import SyncButton from '../components/SyncButton';
 
 interface DeadStockData {
   productId: string;
@@ -93,7 +96,12 @@ const InventoryManagement: React.FC = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Управление остатками</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-gray-900">Управление остатками</h1>
+        <SyncButton onClick={() => window.location.reload()}>
+          Синхронизировать
+        </SyncButton>
+      </div>
 
       {/* Filters */}
       <div className="bg-white p-6 rounded-lg shadow-md">
