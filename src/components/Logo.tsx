@@ -1,4 +1,5 @@
 import React from 'react';
+import logoImage from '/images/marketos-logo.png';
 
 interface LogoProps {
   className?: string;
@@ -11,7 +12,7 @@ export function Logo({ className = '', showText = true }: LogoProps) {
       {/* Logo Icon */}
       <div className="w-8 h-8 flex items-center justify-center">
         <img
-          src={`/images/marketos-logo.png?v=${Date.now()}`}
+          src={logoImage}
           alt="MarketOS Logo"
           className="w-full h-full object-contain"
           onError={(e) => {
