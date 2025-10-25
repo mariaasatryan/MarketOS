@@ -41,7 +41,7 @@ export function Logo({ className = '', showText = true }: LogoProps) {
           <span className="text-2xl font-bold text-red-600 leading-tight">
             MarketOS
           </span>
-          <span className="text-sm text-slate-500 font-medium">
+          <span className="text-xs text-slate-500 font-medium">
             Виртуальный менеджер
           </span>
         </div>
