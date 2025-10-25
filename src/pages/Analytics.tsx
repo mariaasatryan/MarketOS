@@ -124,16 +124,14 @@ export function Analytics() {
           <p className="text-slate-600 dark:text-slate-400 mt-1">Анализ продаж и товаров</p>
         </div>
         <div className="flex gap-2">
-          {integrations.length > 0 && (
-            <button
-              onClick={handleSyncData}
-              disabled={syncing}
-              className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <RefreshCw size={20} className={syncing ? 'animate-spin' : ''} />
-              {syncing ? 'Синхронизация...' : 'Синхронизировать'}
-            </button>
-          )}
+          <button
+            onClick={handleSyncData}
+            disabled={syncing}
+            className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <RefreshCw size={20} className={syncing ? 'animate-spin' : ''} />
+            {syncing ? 'Синхронизация...' : 'Синхронизировать'}
+          </button>
           <button
             onClick={() => setPeriod('7d')}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${

@@ -85,16 +85,14 @@ export default function Dashboard() {
           <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Обзорная панель</h1>
           <p className="text-slate-600 dark:text-slate-400 mt-1">Основные метрики ваших маркетплейсов</p>
         </div>
-        {integrations.length > 0 && (
-          <button
-            onClick={handleSyncData}
-            disabled={syncing}
-            className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <RefreshCw size={20} className={syncing ? 'animate-spin' : ''} />
-            {syncing ? 'Синхронизация...' : 'Синхронизировать'}
-          </button>
-        )}
+        <button
+          onClick={handleSyncData}
+          disabled={syncing}
+          className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <RefreshCw size={20} className={syncing ? 'animate-spin' : ''} />
+          {syncing ? 'Синхронизация...' : 'Синхронизировать'}
+        </button>
       </div>
 
       {integrations.length === 0 ? (

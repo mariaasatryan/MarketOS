@@ -75,16 +75,14 @@ export function Products() {
           <Search size={16} />
           <input className="outline-none" placeholder="Поиск" value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
-        {integrations.length > 0 && (
-          <button
-            onClick={handleSyncData}
-            disabled={syncing}
-            className="flex items-center gap-2 bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <RefreshCw size={16} className={syncing ? 'animate-spin' : ''} />
-            {syncing ? 'Синхронизация...' : 'Синхронизировать'}
-          </button>
-        )}
+        <button
+          onClick={handleSyncData}
+          disabled={syncing}
+          className="flex items-center gap-2 bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <RefreshCw size={16} className={syncing ? 'animate-spin' : ''} />
+          {syncing ? 'Синхронизация...' : 'Синхронизировать'}
+        </button>
         <button className="ml-auto bg-red-600 text-white px-3 py-2 rounded-lg" onClick={() => setOpen(true)}>
           <Plus size={16} className="inline mr-1" /> Добавить
         </button>
