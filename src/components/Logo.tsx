@@ -10,7 +10,7 @@ export function Logo({ className = '', showText = true }: LogoProps) {
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       {/* Logo Icon */}
-      <div className="w-8 h-8 flex items-center justify-center">
+      <div className="w-10 h-10 flex items-center justify-center">
         <img
           src={logoImage}
           alt="MarketOS Logo"
@@ -38,10 +38,10 @@ export function Logo({ className = '', showText = true }: LogoProps) {
       {/* Logo Text */}
       {showText && (
         <div className="flex flex-col">
-          <span className="text-xl font-bold text-red-600 leading-tight">
+          <span className="text-2xl font-bold text-red-600 leading-tight">
             MarketOS
           </span>
-          <span className="text-xs text-slate-500 font-medium">
+          <span className="text-sm text-slate-500 font-medium">
             Виртуальный менеджер
           </span>
         </div>

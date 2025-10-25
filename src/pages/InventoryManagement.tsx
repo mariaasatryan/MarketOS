@@ -1,300 +1,367 @@
-import { useState, useEffect } from 'react';
-import { Package, AlertTriangle, TrendingDown, TrendingUp, RotateCcw, Target, DollarSign } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { marketplaceService } from '../services/marketplaceService';
-import { RealMarketplaceService } from '../services/realMarketplaceService';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-interface InventoryItem {
-  id: string;
-  name: string;
+interface DeadStockData {
+  productId: string;
   sku: string;
-  currentStock: number;
-  minStock: number;
-  maxStock: number;
-  turnoverRate: number;
-  daysInStock: number;
-  status: 'normal' | 'low_stock' | 'overstock' | 'frozen' | 'out_of_stock';
-  revenue: number;
-  cost: number;
-  profit: number;
-  lastSaleDate: string;
+  title: string;
+  stock: number;
+  daysSinceLastSale: number;
+  sellThrough: number;
+  isDeadStock: boolean;
 }
 
-export function InventoryManagement() {
-  const { user } = useAuth();
-  const [inventory, setInventory] = useState<InventoryItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [integrations, setIntegrations] = useState<any[]>([]);
-  const [filter, setFilter] = useState<'all' | 'low_stock' | 'overstock' | 'frozen' | 'out_of_stock'>('all');
-
-  useEffect(() => {
-    if (user) {
-      loadInventory();
-    }
-  }, [user]);
-
-  const loadInventory = async () => {
-    try {
-      setLoading(true);
-      
-      const integrationsData = await marketplaceService.listIntegrations();
-      setIntegrations(integrationsData);
-
-      if (integrationsData.length === 0) {
-        setLoading(false);
-        return;
-      }
-
-      const inventoryData = await generateInventoryAnalysis(integrationsData);
-      setInventory(inventoryData);
-      
-      setLoading(false);
-    } catch (error) {
-      console.error('Ошибка загрузки остатков:', error);
-      setLoading(false);
-    }
+interface HiddenLossData {
+  productId: string;
+  sku: string;
+  title: string;
+  hiddenLosses: {
+    storage: number;
+    penalties: number;
+    logistics: number;
+    other: number;
   };
+  totalHiddenLoss: number;
+  profitImpact: number;
+}
 
-  const generateInventoryAnalysis = async (integrations: any[]): Promise<InventoryItem[]> => {
-    const productsData = await RealMarketplaceService.getRealProductsData(integrations);
-    
-    return productsData.map(product => {
-      const currentStock = product.stock || 0;
-      const minStock = Math.max(5, Math.floor(currentStock * 0.2)); // Минимум 20% от текущего
-      const maxStock = Math.floor(currentStock * 1.5); // Максимум 150% от текущего
-      const turnoverRate = Math.random() * 0.5; // Случайная оборачиваемость 0-0.5
-      const daysInStock = Math.floor(Math.random() * 90) + 1; // 1-90 дней
-      const revenue = (product.price || 0) * Math.floor(Math.random() * 20); // Случайная выручка
-      const cost = (product.price || 0) * 0.3; // Себестоимость 30%
-      const profit = revenue - cost;
-      const lastSaleDate = new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-      
-      let status: 'normal' | 'low_stock' | 'overstock' | 'frozen' | 'out_of_stock' = 'normal';
-      
-      if (currentStock === 0) {
-        status = 'out_of_stock';
-      } else if (currentStock < minStock) {
-        status = 'low_stock';
-      } else if (currentStock > maxStock) {
-        status = 'overstock';
-      } else if (turnoverRate < 0.05 && daysInStock > 30) {
-        status = 'frozen';
-      }
-
-      return {
-        id: product.id,
-        name: product.name,
-        sku: product.sku || `SKU-${product.id.slice(-6)}`,
-        currentStock,
-        minStock,
-        maxStock,
-        turnoverRate,
-        daysInStock,
-        status,
-        revenue,
-        cost,
-        profit,
-        lastSaleDate
-      };
-    });
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'out_of_stock': return 'bg-red-100 text-red-800 border-red-200';
-      case 'low_stock': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'overstock': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'frozen': return 'bg-blue-100 text-blue-800 border-blue-200';
-      default: return 'bg-green-100 text-green-800 border-green-200';
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'out_of_stock': return <AlertTriangle className="text-red-600" size={16} />;
-      case 'low_stock': return <TrendingDown className="text-orange-600" size={16} />;
-      case 'overstock': return <TrendingUp className="text-yellow-600" size={16} />;
-      case 'frozen': return <RotateCcw className="text-blue-600" size={16} />;
-      default: return <Package className="text-green-600" size={16} />;
-    }
-  };
-
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'out_of_stock': return 'Нет в наличии';
-      case 'low_stock': return 'Мало остатков';
-      case 'overstock': return 'Переизбыток';
-      case 'frozen': return 'Заморожен';
-      default: return 'Норма';
-    }
-  };
-
-  const filteredInventory = inventory.filter(item => {
-    if (filter === 'all') return true;
-    return item.status === filter;
+const InventoryManagement: React.FC = () => {
+  const [thresholdDays, setThresholdDays] = useState(30);
+  const [marketplace, setMarketplace] = useState<string>('');
+  const [dateRange, setDateRange] = useState({
+    from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    to: new Date().toISOString().split('T')[0]
   });
 
-  const getInventoryStats = () => {
-    const total = inventory.length;
-    const outOfStock = inventory.filter(item => item.status === 'out_of_stock').length;
-    const lowStock = inventory.filter(item => item.status === 'low_stock').length;
-    const overstock = inventory.filter(item => item.status === 'overstock').length;
-    const frozen = inventory.filter(item => item.status === 'frozen').length;
-    const normal = inventory.filter(item => item.status === 'normal').length;
+  const { data: deadStockData, isLoading: deadStockLoading } = useQuery({
+    queryKey: ['deadStock', thresholdDays, marketplace],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        thresholdDays: thresholdDays.toString()
+      });
+      if (marketplace) params.append('marketplace', marketplace);
 
-    return { total, outOfStock, lowStock, overstock, frozen, normal };
+      const response = await fetch(`/api/analytics/inventory/dead-stock?${params}`, {
+        headers: {
+          'x-user-id': 'demo-user-id'
+        }
+      });
+      if (!response.ok) throw new Error('Failed to fetch dead stock data');
+      return response.json();
+    }
+  });
+
+  const { data: hiddenLossData, isLoading: hiddenLossLoading } = useQuery({
+    queryKey: ['hiddenLosses', dateRange, marketplace],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        from: dateRange.from,
+        to: dateRange.to
+      });
+      if (marketplace) params.append('marketplace', marketplace);
+
+      const response = await fetch(`/api/analytics/inventory/hidden-losses?${params}`, {
+        headers: {
+          'x-user-id': 'demo-user-id'
+        }
+      });
+      if (!response.ok) throw new Error('Failed to fetch hidden loss data');
+      return response.json();
+    }
+  });
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('ru-RU', {
+      style: 'currency',
+      currency: 'RUB',
+      minimumFractionDigits: 0
+    }).format(amount);
   };
 
-  const stats = getInventoryStats();
+  const getDaysColor = (days: number) => {
+    if (days > 90) return 'text-red-600 bg-red-100';
+    if (days > 60) return 'text-orange-600 bg-orange-100';
+    if (days > 30) return 'text-yellow-600 bg-yellow-100';
+    return 'text-green-600 bg-green-100';
+  };
+
+  const getSellThroughColor = (sellThrough: number) => {
+    if (sellThrough > 0.8) return 'text-green-600 bg-green-100';
+    if (sellThrough > 0.5) return 'text-yellow-600 bg-yellow-100';
+    return 'text-red-600 bg-red-100';
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Управление остатками</h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-1">Контроль и оптимизация складских остатков</p>
-        </div>
-        <div className="flex gap-2">
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value as any)}
-            className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-red-500 focus:border-transparent"
-          >
-            <option value="all">Все товары</option>
-            <option value="out_of_stock">Нет в наличии</option>
-            <option value="low_stock">Мало остатков</option>
-            <option value="overstock">Переизбыток</option>
-            <option value="frozen">Заморожены</option>
-          </select>
+    <div className="p-6 space-y-6">
+      <h1 className="text-3xl font-bold text-gray-900">Управление остатками</h1>
+
+      {/* Filters */}
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Порог дней для заморозки
+            </label>
+            <input
+              type="number"
+              value={thresholdDays}
+              onChange={(e) => setThresholdDays(parseInt(e.target.value) || 30)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Маркетплейс
+            </label>
+            <select
+              value={marketplace}
+              onChange={(e) => setMarketplace(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Все</option>
+              <option value="WB">Wildberries</option>
+              <option value="Ozon">Ozon</option>
+              <option value="YaMarket">Яндекс.Маркет</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Дата с (для скрытых потерь)
+            </label>
+            <input
+              type="date"
+              value={dateRange.from}
+              onChange={(e) => setDateRange(prev => ({ ...prev, from: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Дата по (для скрытых потерь)
+            </label>
+            <input
+              type="date"
+              value={dateRange.to}
+              onChange={(e) => setDateRange(prev => ({ ...prev, to: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         </div>
       </div>
 
-      {integrations.length === 0 ? (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-8 text-center">
-          <Package size={48} className="mx-auto text-red-600 dark:text-red-400 mb-4" />
-          <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-2">Подключите маркетплейс</h3>
-          <p className="text-slate-600 dark:text-slate-400 mb-4">
-            Добавьте API-токен маркетплейса в настройках для управления остатками
+      {/* Dead Stock */}
+      <div className="bg-white rounded-lg shadow-md">
+        <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900">Замороженные товары</h3>
+          <p className="text-sm text-gray-600">
+            Товары, которые не продаются более {thresholdDays} дней при наличии остатков
           </p>
         </div>
-      ) : loading ? (
-        <div className="flex justify-center py-12">
-          <div className="animate-spin w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full"></div>
+        <div className="p-6">
+          {deadStockLoading ? (
+            <div className="flex items-center justify-center h-32">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            </div>
+          ) : deadStockData?.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Товар
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Остаток
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Дней без продаж
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Оборачиваемость
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Статус
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Действия
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {deadStockData.map((item: DeadStockData) => (
+                    <tr key={item.productId}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">{item.sku}</div>
+                          <div className="text-sm text-gray-500">{item.title}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {item.stock} шт.
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getDaysColor(item.daysSinceLastSale)}`}>
+                          {item.daysSinceLastSale} дней
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSellThroughColor(item.sellThrough)}`}>
+                          {(item.sellThrough * 100).toFixed(1)}%
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {item.isDeadStock ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            Заморожен
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Активен
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button className="text-blue-600 hover:text-blue-900 mr-3">
+                          Снизить цену
+                        </button>
+                        <button className="text-red-600 hover:text-red-900">
+                          Списать
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-gray-500">Замороженных товаров не найдено</p>
+          )}
         </div>
-      ) : (
-        <>
-          {/* Статистика остатков */}
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-              <div className="text-2xl font-bold text-slate-800 dark:text-white">{stats.total}</div>
-              <div className="text-sm text-slate-600 dark:text-slate-400">Всего товаров</div>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-              <div className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.outOfStock}</div>
-              <div className="text-sm text-slate-600 dark:text-slate-400">Нет в наличии</div>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-              <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">{stats.lowStock}</div>
-              <div className="text-sm text-slate-600 dark:text-slate-400">Мало остатков</div>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-              <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{stats.overstock}</div>
-              <div className="text-sm text-slate-600 dark:text-slate-400">Переизбыток</div>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.frozen}</div>
-              <div className="text-sm text-slate-600 dark:text-slate-400">Заморожены</div>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-              <div className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.normal}</div>
-              <div className="text-sm text-slate-600 dark:text-slate-400">Норма</div>
-            </div>
-          </div>
+      </div>
 
-          {/* Список товаров */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
-            <div className="p-6 border-b border-slate-200 dark:border-slate-700">
-              <h3 className="text-lg font-semibold text-slate-800 dark:text-white">
-                Товары ({filteredInventory.length})
-              </h3>
+      {/* Hidden Losses */}
+      <div className="bg-white rounded-lg shadow-md">
+        <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900">Скрытые потери</h3>
+          <p className="text-sm text-gray-600">
+            Товары с наибольшими скрытыми потерями (складские расходы, штрафы, логистика)
+          </p>
+        </div>
+        <div className="p-6">
+          {hiddenLossLoading ? (
+            <div className="flex items-center justify-center h-32">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
             </div>
-            <div className="divide-y divide-slate-200 dark:divide-slate-700">
-              {filteredInventory.map((item) => (
-                <div key={item.id} className="p-6 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-lg flex items-center justify-center">
-                        <Package className="text-slate-600 dark:text-slate-400" size={20} />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-slate-800 dark:text-white">{item.name}</div>
-                        <div className="text-sm text-slate-600 dark:text-slate-400">SKU: {item.sku}</div>
-                      </div>
+          ) : hiddenLossData?.length > 0 ? (
+            <div className="space-y-4">
+              {hiddenLossData.map((item: HiddenLossData) => (
+                <div key={item.productId} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <h4 className="text-lg font-medium text-gray-900">{item.sku} - {item.title}</h4>
+                      <p className="text-sm text-gray-600">
+                        Общие скрытые потери: {formatCurrency(item.totalHiddenLoss)}
+                      </p>
                     </div>
-                    
-                    <div className="flex items-center gap-6">
-                      <div className="text-center">
-                        <div className="text-lg font-bold text-slate-800 dark:text-white">{item.currentStock}</div>
-                        <div className="text-xs text-slate-600 dark:text-slate-400">Остаток</div>
-                      </div>
-                      
-                      <div className="text-center">
-                        <div className="text-lg font-bold text-slate-800 dark:text-white">
-                          {item.turnoverRate.toFixed(2)}
-                        </div>
-                        <div className="text-xs text-slate-600 dark:text-slate-400">Оборачиваемость</div>
-                      </div>
-                      
-                      <div className="text-center">
-                        <div className="text-lg font-bold text-slate-800 dark:text-white">{item.daysInStock}</div>
-                        <div className="text-xs text-slate-600 dark:text-slate-400">Дней на складе</div>
-                      </div>
-                      
-                      <div className="text-center">
-                        <div className="text-lg font-bold text-slate-800 dark:text-white">
-                          {item.profit.toLocaleString('ru-RU')} ₽
-                        </div>
-                        <div className="text-xs text-slate-600 dark:text-slate-400">Прибыль</div>
-                      </div>
-                      
-                      <div className={`px-3 py-1 rounded-full border text-sm font-medium ${getStatusColor(item.status)}`}>
-                        <div className="flex items-center gap-1">
-                          {getStatusIcon(item.status)}
-                          {getStatusLabel(item.status)}
-                        </div>
-                      </div>
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-red-600">
+                        {formatCurrency(item.totalHiddenLoss)}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Влияние на прибыль: {(item.profitImpact * 100).toFixed(1)}%
+                      </p>
                     </div>
                   </div>
                   
-                  {/* Дополнительная информация */}
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <span className="text-slate-600 dark:text-slate-400">Минимум:</span>
-                      <span className="ml-2 font-medium text-slate-800 dark:text-white">{item.minStock}</span>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="bg-yellow-50 p-3 rounded-lg">
+                      <p className="text-sm text-gray-600">Складские расходы</p>
+                      <p className="text-lg font-semibold text-yellow-800">
+                        {formatCurrency(item.hiddenLosses.storage)}
+                      </p>
                     </div>
-                    <div>
-                      <span className="text-slate-600 dark:text-slate-400">Максимум:</span>
-                      <span className="ml-2 font-medium text-slate-800 dark:text-white">{item.maxStock}</span>
+                    <div className="bg-red-50 p-3 rounded-lg">
+                      <p className="text-sm text-gray-600">Штрафы</p>
+                      <p className="text-lg font-semibold text-red-800">
+                        {formatCurrency(item.hiddenLosses.penalties)}
+                      </p>
                     </div>
-                    <div>
-                      <span className="text-slate-600 dark:text-slate-400">Последняя продажа:</span>
-                      <span className="ml-2 font-medium text-slate-800 dark:text-white">
-                        {new Date(item.lastSaleDate).toLocaleDateString('ru-RU')}
-                      </span>
+                    <div className="bg-blue-50 p-3 rounded-lg">
+                      <p className="text-sm text-gray-600">Логистика</p>
+                      <p className="text-lg font-semibold text-blue-800">
+                        {formatCurrency(item.hiddenLosses.logistics)}
+                      </p>
                     </div>
-                    <div>
-                      <span className="text-slate-600 dark:text-slate-400">Выручка:</span>
-                      <span className="ml-2 font-medium text-slate-800 dark:text-white">
-                        {item.revenue.toLocaleString('ru-RU')} ₽
-                      </span>
+                    <div className="bg-gray-50 p-3 rounded-lg">
+                      <p className="text-sm text-gray-600">Прочее</p>
+                      <p className="text-lg font-semibold text-gray-800">
+                        {formatCurrency(item.hiddenLosses.other)}
+                      </p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+          ) : (
+            <p className="text-gray-500">Скрытых потерь не обнаружено</p>
+          )}
+        </div>
+      </div>
+
+      {/* Summary Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="flex items-center">
+            <div className="p-2 bg-red-100 rounded-lg">
+              <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Замороженных товаров</p>
+              <p className="text-2xl font-semibold text-gray-900">
+                {deadStockData?.filter(item => item.isDeadStock).length || 0}
+              </p>
+            </div>
           </div>
-        </>
-      )}
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="flex items-center">
+            <div className="p-2 bg-yellow-100 rounded-lg">
+              <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Общие скрытые потери</p>
+              <p className="text-2xl font-semibold text-gray-900">
+                {formatCurrency(hiddenLossData?.reduce((sum, item) => sum + item.totalHiddenLoss, 0) || 0)}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="flex items-center">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Среднее влияние на прибыль</p>
+              <p className="text-2xl font-semibold text-gray-900">
+                {hiddenLossData?.length > 0 
+                  ? (hiddenLossData.reduce((sum, item) => sum + item.profitImpact, 0) / hiddenLossData.length * 100).toFixed(1)
+                  : 0}%
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export { InventoryManagement };

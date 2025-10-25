@@ -47,7 +47,7 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
     <div className="flex h-screen bg-slate-50">
       <aside className="w-64 bg-white border-r border-slate-200 flex flex-col shadow-sm">
         <div className="p-6 border-b border-slate-200">
-          <Logo />
+          <Logo className="justify-center" />
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
