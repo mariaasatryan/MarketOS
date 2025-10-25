@@ -10,6 +10,7 @@ import {
   FileSpreadsheet,
   HardDrive,
   Sparkles,
+  Bot,
   Settings,
   GripVertical
 } from 'lucide-react';
@@ -40,6 +41,7 @@ const defaultMenuItems = [
   { id: 'sheets', icon: FileSpreadsheet },
   { id: 'disk', icon: HardDrive },
   { id: 'aiTools', icon: Sparkles },
+  { id: 'marketos-gpt', icon: Bot },
   { id: 'settings', icon: Settings },
 ];
 

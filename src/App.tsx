@@ -18,6 +18,7 @@ import { Calendar } from './pages/Calendar';
 import { Sheets } from './pages/Sheets';
 import { Disk } from './pages/Disk';
 import { AITools } from './pages/AITools';
+import MarketOSGPT from './pages/MarketOSGPT';
 import { Settings } from './pages/Settings';
 import { APITest } from './pages/APITest';
 
@@ -50,6 +51,8 @@ function AppContent() {
         return <Disk />;
       case 'aiTools':
         return <AITools />;
+      case 'marketos-gpt':
+        return <MarketOSGPT />;
       case 'settings':
         return <Settings isEditMode={isEditMode} setIsEditMode={setIsEditMode} />;
       case 'api-test':
