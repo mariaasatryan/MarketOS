@@ -11,7 +11,7 @@ export function Logo({ className = '', showText = true }: LogoProps) {
       {/* Logo Icon */}
       <div className="w-8 h-8 flex items-center justify-center">
         <img
-          src="/images/marketos-logo.png"
+          src="/images/marketos-logo.png?v=2"
           alt="MarketOS Logo"
           className="w-full h-full object-contain"
           onError={(e) => {
