@@ -11,11 +11,12 @@ export function Logo({ className = '', showText = true }: LogoProps) {
       {/* Logo Icon */}
       <div className="w-8 h-8 flex items-center justify-center">
         <img
-          src="/images/marketos-logo.png?v=2"
+          src={`/images/marketos-logo.png?v=${Date.now()}`}
           alt="MarketOS Logo"
           className="w-full h-full object-contain"
           onError={(e) => {
             // Fallback to inline SVG if image fails to load
+            console.error('❌ Logo image failed to load:', e);
             const target = e.target as HTMLImageElement;
             target.style.display = 'none';
             const parent = target.parentElement;
@@ -26,6 +27,9 @@ export function Logo({ className = '', showText = true }: LogoProps) {
                 </svg>
               `;
             }
+          }}
+          onLoad={() => {
+            console.log('✅ Logo image loaded successfully');
           }}
         />
       </div>
