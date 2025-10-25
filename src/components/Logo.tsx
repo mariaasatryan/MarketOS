@@ -18,9 +18,9 @@ export function Logo({ className = '', showText = true }: LogoProps) {
           xmlns="http://www.w3.org/2000/svg"
           className="text-red-600"
         >
-          {/* MarketOS Logo Icon - точная копия оригинального логотипа */}
+          {/* MarketOS Logo Icon - облако слева + символ бесконечности справа */}
           <path
-            d="M8 14C8 10 10 8 14 8C16 8 17.5 9 18.5 10.5C19.5 9 21 8 23 8C27 8 29 10 29 14C29 18 27 20 23 20C21 20 19.5 19 18.5 17.5C17.5 19 16 20 14 20C10 20 8 18 8 14Z"
+            d="M4 16C4 10 8 6 14 6C16 6 17.5 7 18.5 8.5C19.5 7 21 6 23 6C29 6 33 10 33 16C33 22 29 26 23 26C21 26 19.5 25 18.5 23.5C17.5 25 16 26 14 26C8 26 4 22 4 16ZM20 16C20 18 22 20 24 20C26 20 28 18 28 16C28 14 26 12 24 12C22 12 20 14 20 16Z"
             stroke="currentColor"
             strokeWidth="2.5"
             strokeLinecap="round"
