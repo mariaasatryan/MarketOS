@@ -27,9 +27,9 @@ export const SyncButton: React.FC<SyncButtonProps> = ({
   };
 
   const variantClasses = {
-    primary: `bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-md transition-colors ${colors.primary}`,
-    secondary: `bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium rounded-md transition-colors ${colors.secondary}`,
-    outline: `border border-blue-500 text-blue-500 hover:bg-blue-50 font-medium rounded-md transition-colors ${colors.outline}`
+    primary: `bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-md transition-colors`,
+    secondary: `bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium rounded-md transition-colors`,
+    outline: `border border-blue-500 text-blue-500 hover:bg-blue-50 font-medium rounded-md transition-colors`
   };
 
   return (

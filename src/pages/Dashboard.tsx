@@ -150,8 +150,8 @@ export default function Dashboard() {
               <h2 className="text-xl font-semibold text-slate-800 dark:text-white mb-4">Детализация по маркетплейсам</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {stats.byMarketplace.wildberries.products > 0 && (
-                  <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                    <h3 className="font-semibold text-red-800 dark:text-red-300 mb-2">Wildberries</h3>
+                  <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                    <h3 className="font-semibold text-purple-800 dark:text-purple-300 mb-2">Wildberries</h3>
                     <div className="space-y-1 text-sm">
                       <div>Товары: {stats.byMarketplace.wildberries.products}</div>
                       <div>Заказы: {stats.byMarketplace.wildberries.orders}</div>
@@ -161,8 +161,8 @@ export default function Dashboard() {
                   </div>
                 )}
                 {stats.byMarketplace.ozon.products > 0 && (
-                  <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <h3 className="font-semibold text-green-800 dark:text-green-300 mb-2">Ozon</h3>
+                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <h3 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">Ozon</h3>
                     <div className="space-y-1 text-sm">
                       <div>Товары: {stats.byMarketplace.ozon.products}</div>
                       <div>Заказы: {stats.byMarketplace.ozon.orders}</div>
@@ -172,8 +172,8 @@ export default function Dashboard() {
                   </div>
                 )}
                 {stats.byMarketplace.ym.products > 0 && (
-                  <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                    <h3 className="font-semibold text-purple-800 dark:text-purple-300 mb-2">Яндекс.Маркет</h3>
+                  <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                    <h3 className="font-semibold text-amber-800 dark:text-amber-300 mb-2">Яндекс.Маркет</h3>
                     <div className="space-y-1 text-sm">
                       <div>Товары: {stats.byMarketplace.ym.products}</div>
                       <div>Заказы: {stats.byMarketplace.ym.orders}</div>

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { DollarSign, ShoppingCart, Package, RefreshCw, TrendingUp, TrendingDown, AlertTriangle, Target } from 'lucide-react';
+import { DollarSign, ShoppingCart, Package, TrendingUp, AlertTriangle, Target } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { marketplaceService } from '../services/marketplaceService';
 import { RealMarketplaceService } from '../services/realMarketplaceService';
+import SyncButton from '../components/SyncButton';
 
 interface SalesData {
   date: string;
@@ -37,7 +38,6 @@ export function Analytics() {
   const [salesData, setSalesData] = useState<SalesData[]>([]);
   const [topProducts, setTopProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [integrations, setIntegrations] = useState<any[]>([]);
   const [syncing, setSyncing] = useState(false);
   const [profitabilityAnalysis, setProfitabilityAnalysis] = useState<ProfitabilityAnalysis[]>([]);
   const [financialMetrics, setFinancialMetrics] = useState<FinancialMetrics | null>(null);
@@ -55,7 +55,6 @@ export function Analytics() {
       
       // Загружаем интеграции
       const integrationsData = await marketplaceService.listIntegrations();
-      setIntegrations(integrationsData);
 
       // Получаем реальные данные аналитики через API маркетплейсов
       const realAnalyticsData = await RealMarketplaceService.getRealAnalyticsData(integrationsData);
@@ -124,19 +123,18 @@ export function Analytics() {
           <p className="text-slate-600 dark:text-slate-400 mt-1">Анализ продаж и товаров</p>
         </div>
         <div className="flex gap-2">
-          <button
+          <SyncButton
             onClick={handleSyncData}
-            disabled={syncing}
-            className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            isLoading={syncing}
+            variant="primary"
           >
-            <RefreshCw size={20} className={syncing ? 'animate-spin' : ''} />
             {syncing ? 'Синхронизация...' : 'Синхронизировать'}
-          </button>
+          </SyncButton>
           <button
             onClick={() => setPeriod('7d')}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               period === '7d'
-                ? 'bg-red-600 text-white'
+                ? 'bg-blue-600 text-white'
                 : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
             }`}
           >
@@ -146,7 +144,7 @@ export function Analytics() {
             onClick={() => setPeriod('30d')}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               period === '30d'
-                ? 'bg-red-600 text-white'
+                ? 'bg-blue-600 text-white'
                 : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
             }`}
           >
@@ -156,7 +154,7 @@ export function Analytics() {
             onClick={() => setPeriod('90d')}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               period === '90d'
-                ? 'bg-red-600 text-white'
+                ? 'bg-blue-600 text-white'
                 : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
             }`}
           >
@@ -197,7 +195,7 @@ export function Analytics() {
           
           <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
             <div className="flex items-center gap-3 mb-2">
-              <TrendingUp className="text-red-600 dark:text-red-400" size={24} />
+              <TrendingUp className="text-blue-600 dark:text-blue-400" size={24} />
               <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Прибыль</span>
             </div>
             <div className="text-2xl font-bold text-slate-800 dark:text-white">
@@ -237,8 +235,8 @@ export function Analytics() {
             <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-sm text-slate-600 dark:text-slate-400">Общие продажи</p>
-                <div className="bg-red-100 dark:bg-red-900/30 p-2 rounded-lg">
-                  <DollarSign size={20} className="text-red-600 dark:text-red-400" />
+                <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg">
+                  <DollarSign size={20} className="text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
               <p className="text-3xl font-bold text-slate-800 dark:text-white mb-2">
@@ -283,7 +281,7 @@ export function Analytics() {
                       <div className="flex items-center gap-2 mb-1">
                         <div className="flex-1 bg-slate-100 dark:bg-slate-700 rounded-full h-6 overflow-hidden">
                           <div
-                            className="bg-red-600 dark:bg-blue-500 h-full rounded-full flex items-center justify-end pr-2"
+                            className="bg-blue-600 dark:bg-blue-500 h-full rounded-full flex items-center justify-end pr-2"
                             style={{ width: `${(data.total_sales / maxSales) * 100}%` }}
                           >
                             <span className="text-xs text-white font-medium">
@@ -317,7 +315,7 @@ export function Analytics() {
                     key={product.id}
                     className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg"
                   >
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 dark:bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 dark:bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
                       {idx + 1}
                     </div>
                     <div className="flex-1">
@@ -326,6 +324,72 @@ export function Analytics() {
                         Цена: {Number(product.price || 0).toLocaleString('ru-RU')} ₽ •
                         Остаток: {product.stock || 0} шт
                       </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Анализ прибыльности товаров (Sirena AI функционал) */}
+          {profitabilityAnalysis.length > 0 && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+              <h2 className="text-xl font-semibold text-slate-800 dark:text-white mb-6">Анализ прибыльности</h2>
+              <div className="space-y-4">
+                {profitabilityAnalysis.slice(0, 10).map((item) => (
+                  <div
+                    key={item.productId}
+                    className={`p-4 rounded-lg border ${
+                      item.status === 'loss' 
+                        ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+                        : item.status === 'low_turnover'
+                        ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800'
+                        : item.status === 'frozen'
+                        ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
+                        : 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium text-slate-800 dark:text-white">{item.productName}</h4>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        item.status === 'loss' 
+                          ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
+                          : item.status === 'low_turnover'
+                          ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300'
+                          : item.status === 'frozen'
+                          ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300'
+                          : 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
+                      }`}>
+                        {item.status === 'loss' ? 'Убыток' : 
+                         item.status === 'low_turnover' ? 'Низкий оборот' :
+                         item.status === 'frozen' ? 'Заморожен' : 'Прибыльный'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                      <div>
+                        <span className="text-slate-600 dark:text-slate-400">Выручка:</span>
+                        <div className="font-medium text-slate-800 dark:text-white">
+                          {item.revenue.toLocaleString('ru-RU')} ₽
+                        </div>
+                      </div>
+                      <div>
+                        <span className="text-slate-600 dark:text-slate-400">Прибыль:</span>
+                        <div className={`font-medium ${item.profit >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                          {item.profit.toLocaleString('ru-RU')} ₽
+                        </div>
+                      </div>
+                      <div>
+                        <span className="text-slate-600 dark:text-slate-400">Маржа:</span>
+                        <div className={`font-medium ${item.profitMargin >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                          {item.profitMargin.toFixed(1)}%
+                        </div>
+                      </div>
+                      <div>
+                        <span className="text-slate-600 dark:text-slate-400">Оборачиваемость:</span>
+                        <div className="font-medium text-slate-800 dark:text-white">
+                          {(item.turnoverRate * 100).toFixed(1)}%
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
