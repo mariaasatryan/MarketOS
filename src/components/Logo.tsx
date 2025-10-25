@@ -15,7 +15,7 @@ export function Logo({ className = '', showText = true }: LogoProps) {
           alt="MarketOS Logo"
           className="w-full h-full object-contain"
           onError={(e) => {
-            // Fallback to SVG if image fails to load
+            // Fallback to inline SVG if image fails to load
             const target = e.target as HTMLImageElement;
             target.style.display = 'none';
             const parent = target.parentElement;
