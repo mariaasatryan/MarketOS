@@ -1,0 +1,87 @@
+{
+  "name": "MarketOS - Маркетплейс Менеджер",
+  "short_name": "MarketOS",
+  "description": "Комплексная система управления маркетплейсами с ИИ-аналитикой",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ru",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/images/marketos-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/marketos-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/screenshot-dashboard.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/images/screenshot-mobile.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Главная панель управления",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/images/icons/dashboard.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "MarketAI",
+      "short_name": "MarketAI",
+      "description": "ИИ-помощник для маркетплейсов",
+      "url": "/marketai",
+      "icons": [
+        {
+          "src": "/images/icons/ai.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Аналитика",
+      "short_name": "Analytics",
+      "description": "Финансовая аналитика и отчеты",
+      "url": "/analytics",
+      "icons": [
+        {
+          "src": "/images/icons/analytics.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  }
+}
