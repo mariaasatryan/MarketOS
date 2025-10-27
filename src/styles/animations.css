@@ -38,6 +38,63 @@
   }
 }
 
+/* Базовые стили для всех кнопок */
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+button:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Стили для tech-button */
+.tech-button {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px 0 rgba(16, 185, 129, 0.2);
+}
+
+.tech-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px 0 rgba(16, 185, 129, 0.3);
+}
+
+.tech-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px 0 rgba(16, 185, 129, 0.2);
+}
+
+/* Темная тема для tech-button */
+.dark .tech-button {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  box-shadow: 0 2px 4px 0 rgba(5, 150, 105, 0.3);
+}
+
+.dark .tech-button:hover {
+  box-shadow: 0 4px 8px 0 rgba(5, 150, 105, 0.4);
+}
+
 /* Основные стили кнопок синхронизации */
 .sync-button {
   position: relative;
