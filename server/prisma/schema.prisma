@@ -1,0 +1,267 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql"; url = env("DATABASE_URL") }
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  role         Role     @default(MANAGER)
+  passwordHash String   // если используешь email+pass
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  settings     Json?
+  tokens       Token[]
+  integrations MarketplaceIntegration[]
+  telegramUsers TelegramUser[]
+  notificationRules NotificationRule[]
+}
+
+model Token {
+  id           String   @id @default(cuid())
+  userId       String
+  type         TokenType
+  marketplace  Marketplace?
+  encValue     Bytes    // зашифрованный токен
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  User         User     @relation(fields: [userId], references: [id])
+}
+
+model SheetLink {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  mp        Marketplace?
+  url       String
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model DriveCategory {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  createdAt DateTime @default(now())
+  links     DriveLink[]
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model DriveLink {
+  id         String   @id @default(cuid())
+  categoryId String
+  title      String
+  url        String
+  createdAt  DateTime @default(now())
+  Category   DriveCategory @relation(fields: [categoryId], references: [id])
+}
+
+model CalendarEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  type      EventType
+  marketplace Marketplace?
+  startsAt  DateTime
+  endsAt    DateTime?
+  warehouse String?
+  assignee  String?
+  relatedId String?
+  meetUrl   String?
+  externalId String? // Google event id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  meta      Json?
+  createdAt DateTime @default(now())
+}
+
+// Новые модели для аналитики Sirena.ai
+model MarketplaceIntegration {
+  id          String   @id @default(cuid())
+  userId      String
+  marketplace Marketplace
+  name        String
+  isActive    Boolean  @default(true)
+  settings    Json?    // настройки интеграции
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  products    Product[]
+  sales       Sale[]
+  fees        Fee[]
+  adsStats    AdsStats[]
+  seoSnapshots SeoSnapshot[]
+  alerts      Alert[]
+  User        User     @relation(fields: [userId], references: [id])
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  integrationId String
+  sku         String
+  title       String
+  category    String?
+  costPrice   Decimal  @db.Decimal(10, 2) // себестоимость
+  price       Decimal  @db.Decimal(10, 2) // цена продажи
+  stock       Int      @default(0) // остаток
+  dimensions  Json?    // размеры, вес
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  integration MarketplaceIntegration @relation(fields: [integrationId], references: [id])
+  sales       Sale[]
+  fees        Fee[]
+  adsStats    AdsStats[]
+  seoSnapshots SeoSnapshot[]
+  alerts      Alert[]
+}
+
+model Sale {
+  id           String   @id @default(cuid())
+  integrationId String
+  productId    String
+  date         DateTime
+  qty          Int      // количество проданных
+  revenue      Decimal  @db.Decimal(10, 2) // выручка
+  refundQty    Int      @default(0) // возвраты
+  refundAmount Decimal  @db.Decimal(10, 2) @default(0) // сумма возвратов
+  createdAt    DateTime @default(now())
+  integration  MarketplaceIntegration @relation(fields: [integrationId], references: [id])
+  product      Product  @relation(fields: [productId], references: [id])
+}
+
+model Fee {
+  id           String   @id @default(cuid())
+  integrationId String
+  productId    String
+  date         DateTime
+  type         FeeType
+  amount       Decimal  @db.Decimal(10, 2)
+  meta         Json?    // дополнительная информация
+  createdAt    DateTime @default(now())
+  integration  MarketplaceIntegration @relation(fields: [integrationId], references: [id])
+  product      Product  @relation(fields: [productId], references: [id])
+}
+
+model AdsStats {
+  id           String   @id @default(cuid())
+  integrationId String
+  productId    String
+  date         DateTime
+  platform     String   // WB, Ozon, YaMarket
+  campaign     String?  // название кампании
+  impressions  Int      @default(0)
+  clicks       Int      @default(0)
+  spend        Decimal  @db.Decimal(10, 2) @default(0)
+  orders       Int      @default(0)
+  revenue      Decimal  @db.Decimal(10, 2) @default(0)
+  createdAt    DateTime @default(now())
+  integration  MarketplaceIntegration @relation(fields: [integrationId], references: [id])
+  product      Product  @relation(fields: [productId], references: [id])
+}
+
+model SeoSnapshot {
+  id           String   @id @default(cuid())
+  integrationId String
+  productId    String
+  date         DateTime
+  position     Int?     // позиция в поиске
+  query        String   // поисковый запрос
+  conversion   Decimal? @db.Decimal(5, 4) // конверсия
+  ctr          Decimal? @db.Decimal(5, 4) // CTR
+  createdAt    DateTime @default(now())
+  integration  MarketplaceIntegration @relation(fields: [integrationId], references: [id])
+  product      Product  @relation(fields: [productId], references: [id])
+}
+
+model Alert {
+  id           String   @id @default(cuid())
+  integrationId String
+  productId    String?
+  type         AlertType
+  severity     AlertSeverity
+  message      String
+  date         DateTime
+  resolved     Boolean  @default(false)
+  meta         Json?    // дополнительная информация
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  integration  MarketplaceIntegration @relation(fields: [integrationId], references: [id])
+  product      Product? @relation(fields: [productId], references: [id])
+}
+
+model TelegramUser {
+  id        String   @id @default(cuid())
+  userId    String
+  telegramId String  @unique
+  username  String?
+  firstName String?
+  lastName  String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model NotificationRule {
+  id           String   @id @default(cuid())
+  userId       String
+  type         AlertType
+  conditions   Json     // условия срабатывания
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  User         User     @relation(fields: [userId], references: [id])
+}
+
+// Агрегированные данные для быстрого доступа
+model DailyKPI {
+  id           String   @id @default(cuid())
+  integrationId String
+  date         DateTime
+  orders       Int      @default(0)
+  revenue      Decimal  @db.Decimal(10, 2) @default(0)
+  profit       Decimal  @db.Decimal(10, 2) @default(0)
+  stock        Int      @default(0)
+  adsSpend     Decimal  @db.Decimal(10, 2) @default(0)
+  fees         Decimal  @db.Decimal(10, 2) @default(0)
+  createdAt    DateTime @default(now())
+  integration  MarketplaceIntegration @relation(fields: [integrationId], references: [id])
+}
+
+model ProductAnalytics {
+  id           String   @id @default(cuid())
+  productId    String
+  date         DateTime
+  daysOfCover  Int?     // дней покрытия остатком
+  sellThrough  Decimal? @db.Decimal(5, 4) // оборачиваемость
+  isDeadStock  Boolean  @default(false) // замороженный товар
+  roas         Decimal? @db.Decimal(5, 4) // ROAS
+  cpa          Decimal? @db.Decimal(10, 2) // CPA
+  margin       Decimal? @db.Decimal(5, 4) // маржа
+  createdAt    DateTime @default(now())
+  product      Product  @relation(fields: [productId], references: [id])
+}
+
+enum Role { ADMIN MANAGER VIEWER }
+enum TokenType { MP GOOGLE }
+enum Marketplace { WB Ozon YaMarket }
+enum EventType { supply shipment deadline reminder custom }
+enum FeeType { COMMISSION STORAGE PENALTY LOGISTICS ADVERTISING OTHER }
+enum AlertType { 
+  DEAD_STOCK 
+  LOW_ROAS 
+  HIGH_STORAGE_COST 
+  SUPPLY_DEADLINE 
+  STOCK_OUT 
+  HIGH_REFUND_RATE 
+  CAMPAIGN_CONFLICT 
+  SEO_DROP 
+  CUSTOM 
+}
+enum AlertSeverity { LOW MEDIUM HIGH CRITICAL }

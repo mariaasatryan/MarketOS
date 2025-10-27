@@ -1,0 +1,40 @@
+{
+  "name": "marketos-server",
+  "version": "1.0.0",
+  "description": "MarketOS Analytics Server - Sirena.ai competitor",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "dev": "tsx watch src/main.ts",
+    "seed": "tsx src/scripts/seedDemoData.ts",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.7.1",
+    "fastify": "^4.24.3",
+    "telegraf": "^4.15.6",
+    "node-cron": "^3.0.3",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@types/node-cron": "^3.0.11",
+    "prisma": "^5.7.1",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "analytics",
+    "marketplace",
+    "ecommerce",
+    "wildberries",
+    "ozon",
+    "yandex-market"
+  ],
+  "author": "MarketOS Team",
+  "license": "MIT"
+}

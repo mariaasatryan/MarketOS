@@ -1,0 +1,502 @@
+import { useState, useEffect, useCallback } from 'react';
+import { Plus, ExternalLink, Search, Trash2, Edit2, FolderOpen } from 'lucide-react';
+import { useI18n } from '../contexts/I18nContext';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
+import { validateUrl, sanitizeInput } from '../utils/validation';
+
+interface DiskLink {
+  id: string;
+  name: string;
+  url: string;
+  description?: string;
+  created_at: string;
+  folder_id?: string;
+}
+
+
+export function Disk() {
+  useI18n();
+  const { user } = useAuth();
+  const [links, setLinks] = useState<DiskLink[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newLink, setNewLink] = useState({ name: '', url: '', description: '', folder_id: '' });
+  const [editingLink, setEditingLink] = useState<DiskLink | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      loadFiles();
+    }
+  }, [user]);
+
+  const loadFiles = async () => {
+    try {
+      setLoading(true);
+      
+      // Загружаем файлы
+      const { data: filesData, error: filesError } = await supabase
+        .from('google_drive_files')
+        .select('*')
+        .eq('user_id', user!.id)
+        .order('created_at', { ascending: false });
+
+      if (filesError) throw filesError;
+      setLinks(filesData || []);
+
+    } catch (error) {
+      console.error('Error loading files:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const categories = [
+    { id: 'all', name: 'Все', icon: FolderOpen },
+    { id: 'фотосъемки', name: 'Фотосъемки', icon: FolderOpen },
+    { id: 'инфографика', name: 'Инфографика', icon: FolderOpen },
+    { id: 'документы', name: 'Документы', icon: FolderOpen },
+    { id: 'договоры', name: 'Договоры', icon: FolderOpen },
+    { id: 'no-folder', name: 'Без папки', icon: FolderOpen },
+  ];
+
+  const filteredLinks = links.filter(link => {
+    let matchesCategory = true;
+    
+    if (selectedCategory === 'no-folder') {
+      // Показываем только файлы без папки
+      matchesCategory = !link.folder_id;
+    } else if (selectedCategory !== 'all') {
+      // Если выбрана конкретная папка (включая предустановленные)
+      matchesCategory = link.folder_id === selectedCategory;
+    }
+    
+    const matchesSearch = link.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+
+  const handleAddLink = useCallback(async () => {
+    if (!newLink.name || !newLink.url || !user) return;
+
+    // Validate inputs
+    if (!validateUrl(newLink.url)) {
+      alert('Пожалуйста, введите корректный URL');
+      return;
+    }
+
+    const sanitizedLink = {
+      name: sanitizeInput(newLink.name),
+      url: sanitizeInput(newLink.url),
+      description: newLink.description ? sanitizeInput(newLink.description) : '',
+      folder_id: newLink.folder_id,
+    };
+
+    try {
+      const { data, error } = await supabase
+        .from('google_drive_files')
+        .insert([{
+          user_id: user.id,
+          name: sanitizedLink.name,
+          url: sanitizedLink.url,
+          description: sanitizedLink.description || null,
+          folder_id: sanitizedLink.folder_id || null,
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+      setLinks([data, ...links]);
+      setNewLink({ name: '', url: '', description: '', folder_id: '' });
+      setShowAddModal(false);
+    } catch (error) {
+      console.error('Error adding file:', error);
+      alert('Ошибка при добавлении файла');
+    }
+  }, [newLink, user, links]);
+
+  const handleDeleteLink = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('google_drive_files')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user!.id);
+
+      if (error) throw error;
+      setLinks(links.filter(link => link.id !== id));
+    } catch (error) {
+      console.error('Error deleting file:', error);
+      alert('Ошибка при удалении файла');
+    }
+  };
+
+  const handleUpdateLink = async () => {
+    if (!editingLink || !user) return;
+
+    try {
+      const { error } = await supabase
+        .from('google_drive_files')
+        .update({
+          name: editingLink.name,
+          url: editingLink.url,
+          description: editingLink.description || null,
+          folder_id: editingLink.folder_id || null,
+        })
+        .eq('id', editingLink.id)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      setLinks(links.map(link => link.id === editingLink.id ? editingLink : link));
+      setShowEditModal(false);
+      setEditingLink(null);
+    } catch (error) {
+      console.error('Error updating file:', error);
+      alert('Ошибка при обновлении файла');
+    }
+  };
+
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Диск</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">Управление файлами и ссылками</p>
+        </div>
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
+        >
+          <Plus size={20} />
+          Добавить файл
+        </button>
+      </div>
+
+      <div className="flex gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+          <input
+            type="text"
+            placeholder="Поиск файлов..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+      </div>
+
+      <div className="flex gap-2 overflow-x-auto pb-2">
+        {categories.map(category => (
+          <button
+            key={category.id}
+            onClick={() => setSelectedCategory(category.id)}
+            className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors flex items-center gap-2 ${
+              selectedCategory === category.id
+                ? 'bg-blue-600 text-white'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+            }`}
+          >
+            <category.icon size={16} />
+            {category.name}
+          </button>
+        ))}
+      </div>
+
+      {loading ? (
+        <div className="flex justify-center py-12">
+          <div className="animate-spin w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full"></div>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {false ? (
+            // Показываем папки с файлами внутри
+            filteredFolders.map(folder => {
+              const folderFiles = links.filter(link => link.folder_id === folder.id);
+              return (
+                <div key={folder.id} className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg">
+                        <FolderOpen className="text-yellow-600 dark:text-yellow-400" size={24} />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-slate-800 dark:text-white">{folder.name}</h3>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                          {folderFiles.length} файлов
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {folderFiles.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {folderFiles.map(link => (
+                        <div
+                          key={link.id}
+                          className="bg-slate-50 dark:bg-slate-700 rounded-lg p-4 border border-slate-200 dark:border-slate-600 hover:shadow-md transition-shadow"
+                        >
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex-1">
+                              <h4 className="font-medium text-slate-800 dark:text-white mb-1">{link.name}</h4>
+                              <p className="text-xs text-slate-500 dark:text-slate-400">
+                                {link.folder_id ? categories.find(c => c.id === link.folder_id)?.name || 'Папка' : 'Без папки'}
+                              </p>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={() => {
+                                  setEditingLink(link);
+                                  setShowEditModal(true);
+                                }}
+                                className="p-1 text-slate-400 hover:text-blue-600 transition-colors"
+                                title="Редактировать"
+                              >
+                                <Edit2 size={14} />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteLink(link.id)}
+                                className="p-1 text-slate-400 hover:text-red-600 transition-colors"
+                                title="Удалить"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          </div>
+                          <a
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm transition-colors"
+                          >
+                            <ExternalLink size={14} />
+                            Открыть
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-slate-500 dark:text-slate-400">
+                      <FolderOpen size={32} className="mx-auto mb-2 opacity-50" />
+                      <p>Папка пуста</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          ) : (
+            // Показываем файлы в обычном виде
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredLinks.map(link => (
+            <div
+              key={link.id}
+              className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-1">{link.name}</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    {link.folder_id ? categories.find(c => c.id === link.folder_id)?.name || 'Папка' : 'Без папки'}
+                  </p>
+                  {link.description && (
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">{link.description}</p>
+                  )}
+                </div>
+                <FolderOpen className="text-blue-600 dark:text-blue-400" size={24} />
+              </div>
+
+            <div className="flex items-center gap-2 mt-4">
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 flex items-center justify-center gap-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors font-medium text-sm"
+              >
+                <ExternalLink size={16} />
+                Открыть
+              </a>
+              <button 
+                onClick={() => {
+                  setEditingLink(link);
+                  setShowEditModal(true);
+                }}
+                className="p-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+              >
+                <Edit2 size={16} />
+              </button>
+              <button
+                onClick={() => handleDeleteLink(link.id)}
+                className="p-2 text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {filteredLinks.length === 0 && (
+        <div className="text-center py-12">
+          <FolderOpen className="mx-auto text-slate-300 dark:text-slate-600 mb-4" size={64} />
+          <p className="text-slate-600 dark:text-slate-400">Ничего не найдено</p>
+        </div>
+      )}
+
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 max-w-md w-full mx-4">
+            <h2 className="text-xl font-semibold text-slate-800 dark:text-white mb-4">Добавить файл</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Название
+                </label>
+                <input
+                  type="text"
+                  value={newLink.name}
+                  onChange={(e) => setNewLink({ ...newLink, name: e.target.value })}
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  URL
+                </label>
+                <input
+                  type="url"
+                  placeholder="https://"
+                  value={newLink.url}
+                  onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Папка
+                </label>
+                <select
+                  value={newLink.folder_id}
+                  onChange={(e) => setNewLink({ ...newLink, folder_id: e.target.value })}
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Без папки</option>
+                  {categories.slice(1, -1).map(category => (
+                    <option key={category.id} value={category.id}>{category.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Описание (опционально)
+                </label>
+                <textarea
+                  value={newLink.description}
+                  onChange={(e) => setNewLink({ ...newLink, description: e.target.value })}
+                  rows={2}
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={handleAddLink}
+                  disabled={!newLink.name || !newLink.url}
+                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Добавить
+                </button>
+                <button
+                  onClick={() => setShowAddModal(false)}
+                  className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors font-medium"
+                >
+                  Отмена
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {showEditModal && editingLink && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 max-w-md w-full mx-4">
+            <h2 className="text-xl font-semibold text-slate-800 dark:text-white mb-4">Редактировать файл</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Название
+                </label>
+                <input
+                  type="text"
+                  value={editingLink.name}
+                  onChange={(e) => setEditingLink({...editingLink, name: e.target.value})}
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  URL
+                </label>
+                <input
+                  type="url"
+                  value={editingLink.url}
+                  onChange={(e) => setEditingLink({...editingLink, url: e.target.value})}
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Папка
+                </label>
+                <select
+                  value={editingLink.folder_id || ''}
+                  onChange={(e) => setEditingLink({...editingLink, folder_id: e.target.value})}
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Без папки</option>
+                  {categories.slice(1, -1).map(category => (
+                    <option key={category.id} value={category.id}>{category.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Описание (опционально)
+                </label>
+                <textarea
+                  value={editingLink.description || ''}
+                  onChange={(e) => setEditingLink({...editingLink, description: e.target.value})}
+                  rows={2}
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={handleUpdateLink}
+                  disabled={!editingLink.name || !editingLink.url}
+                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Сохранить
+                </button>
+                <button
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setEditingLink(null);
+                  }}
+                  className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors font-medium"
+                >
+                  Отмена
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
+}

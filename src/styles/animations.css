@@ -1,0 +1,398 @@
+/* Современные кнопки синхронизации в стиле стартапов */
+@keyframes smooth-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes gentle-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+  }
+}
+
+@keyframes shimmer-effect {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Основные стили кнопок синхронизации */
+.sync-button {
+  position: relative;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.25);
+  will-change: transform, box-shadow, background;
+}
+
+.sync-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #1d4ed8 100%);
+  background-size: 200% 200%;
+  animation: smooth-gradient 4s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.sync-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px 0 rgba(59, 130, 246, 0.4);
+}
+
+.sync-button:hover::before {
+  opacity: 1;
+}
+
+.sync-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.25);
+}
+
+.sync-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  animation: none;
+}
+
+.sync-button:disabled::before {
+  animation: none;
+}
+
+/* Компактная версия */
+.sync-button-sm {
+  position: relative;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: 0 2px 8px 0 rgba(59, 130, 246, 0.25);
+  will-change: transform, box-shadow, background;
+}
+
+.sync-button-sm::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #1d4ed8 100%);
+  background-size: 200% 200%;
+  animation: smooth-gradient 4s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.sync-button-sm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px 0 rgba(59, 130, 246, 0.4);
+}
+
+.sync-button-sm:hover::before {
+  opacity: 1;
+}
+
+.sync-button-sm:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px 0 rgba(59, 130, 246, 0.25);
+}
+
+.sync-button-sm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  animation: none;
+}
+
+.sync-button-sm:disabled::before {
+  animation: none;
+}
+
+/* Большая версия */
+.sync-button-lg {
+  position: relative;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 1.125rem;
+  border: none;
+  border-radius: 16px;
+  padding: 16px 32px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.25);
+  will-change: transform, box-shadow, background;
+}
+
+.sync-button-lg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #1d4ed8 100%);
+  background-size: 200% 200%;
+  animation: smooth-gradient 4s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.sync-button-lg:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px 0 rgba(59, 130, 246, 0.4);
+}
+
+.sync-button-lg:hover::before {
+  opacity: 1;
+}
+
+.sync-button-lg:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.25);
+}
+
+.sync-button-lg:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  animation: none;
+}
+
+.sync-button-lg:disabled::before {
+  animation: none;
+}
+
+/* Вторичный стиль */
+.sync-button-secondary {
+  position: relative;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  color: #1e293b;
+  font-weight: 600;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+  will-change: transform, box-shadow, background;
+}
+
+.sync-button-secondary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+  background-size: 200% 200%;
+  animation: smooth-gradient 4s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.sync-button-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.15);
+  border-color: #94a3b8;
+}
+
+.sync-button-secondary:hover::before {
+  opacity: 1;
+}
+
+.sync-button-secondary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+.sync-button-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  animation: none;
+}
+
+.sync-button-secondary:disabled::before {
+  animation: none;
+}
+
+/* Контурный стиль */
+.sync-button-outline {
+  position: relative;
+  background: transparent;
+  color: #3b82f6;
+  font-weight: 600;
+  border: 2px solid #3b82f6;
+  border-radius: 12px;
+  padding: 10px 22px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: 0 2px 8px 0 rgba(59, 130, 246, 0.1);
+  will-change: transform, box-shadow, background, color;
+}
+
+.sync-button-outline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  background-size: 200% 200%;
+  animation: smooth-gradient 4s ease-in-out infinite;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+.sync-button-outline:hover {
+  transform: translateY(-2px);
+  color: white;
+  box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.3);
+}
+
+.sync-button-outline:hover::before {
+  opacity: 1;
+}
+
+.sync-button-outline:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px 0 rgba(59, 130, 246, 0.1);
+}
+
+.sync-button-outline:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  animation: none;
+}
+
+.sync-button-outline:disabled::before {
+  animation: none;
+}
+
+/* Темная тема */
+.dark .sync-button,
+.dark .sync-button-sm,
+.dark .sync-button-lg {
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+  box-shadow: 0 4px 14px 0 rgba(30, 64, 175, 0.3);
+}
+
+.dark .sync-button::before,
+.dark .sync-button-sm::before,
+.dark .sync-button-lg::before {
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 50%, #1e3a8a 100%);
+}
+
+.dark .sync-button:hover,
+.dark .sync-button-sm:hover,
+.dark .sync-button-lg:hover {
+  box-shadow: 0 8px 25px 0 rgba(30, 64, 175, 0.5);
+}
+
+.dark .sync-button-secondary {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: #f1f5f9;
+  border-color: #475569;
+}
+
+.dark .sync-button-secondary::before {
+  background: linear-gradient(135deg, #334155 0%, #1e293b 50%, #0f172a 100%);
+}
+
+.dark .sync-button-secondary:hover {
+  border-color: #64748b;
+  box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+.dark .sync-button-outline {
+  color: #60a5fa;
+  border-color: #3b82f6;
+}
+
+.dark .sync-button-outline::before {
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+}
+
+.dark .sync-button-outline:hover {
+  color: white;
+  box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.4);
+}
+
+/* Анимация загрузки */
+.sync-button-loading {
+  animation: gentle-pulse 2s ease-in-out infinite;
+}
+
+.sync-button-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Удаляем старые неиспользуемые стили */
