@@ -47,6 +47,34 @@
     "russia": "Russia",
     "selectedCount": "Selected marketplaces"
   },
+  "products": {
+    "title": "Products",
+    "subtitle": "Product management",
+    "search": "Search products...",
+    "sync": "Sync",
+    "syncing": "Syncing...",
+    "add": "Add product",
+    "creating": "Creating...",
+    "create": "Create",
+    "cancel": "Cancel",
+    "price": "Price",
+    "stock": "Stock",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this product?",
+    "newProduct": "New Product",
+    "name": "Product Name",
+    "noProducts": "No products found",
+    "noProductsDescription": "Try changing search filters"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "subtitle": "Review management",
+    "enterReply": "Enter your reply...",
+    "send": "Send",
+    "noReviews": "No reviews found",
+    "noReviewsDescription": "Reviews will appear here when received"
+  },
   "nav": {
     "dashboard": "Overview",
     "products": "Products",
