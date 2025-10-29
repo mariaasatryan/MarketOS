@@ -70,14 +70,14 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                className={`w-full flex items-center justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActive
                     ? 'bg-red-50 text-red-700 font-medium border-l-4 border-red-600'
                     : 'text-slate-700 hover:bg-slate-50 hover:text-red-600'
                 }`}
               >
-                <Icon size={20} />
-                <span>{item.label}</span>
+                <Icon size={20} className="flex-shrink-0" />
+                <span className="text-left">{item.label}</span>
               </button>
             );
           })}
@@ -86,10 +86,10 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
         <div className="p-4 border-t border-slate-200">
           <button
             onClick={signOut}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+            className="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-lg text-slate-700 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
           >
-            <LogOut size={20} />
-            <span>Выйти</span>
+            <LogOut size={20} className="flex-shrink-0" />
+            <span className="text-left">Выйти</span>
           </button>
         </div>
       </aside>

@@ -240,7 +240,7 @@ export function LayoutDraggable({ children, currentPage, onNavigate, isEditMode,
                           
                           <button
                             onClick={() => !isDragging && !isEditMode && onNavigate(item.id)}
-                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ${
+                            className={`w-full flex items-center justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-300 ${
                               isSpecial
                                 ? isActive
                                   ? 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-bold shadow-lg shadow-blue-500/25 animate-pulse'
@@ -266,8 +266,8 @@ export function LayoutDraggable({ children, currentPage, onNavigate, isEditMode,
                                 <GripVertical size={16} className="text-slate-400" />
                               </div>
                             )}
-                            <Icon size={20} className={isSpecial ? 'text-blue-600 dark:text-blue-400' : ''} />
-                            <span className={isSpecial ? 'text-blue-800 dark:text-blue-200' : ''}>{item.label}</span>
+                            <Icon size={20} className={`flex-shrink-0 ${isSpecial ? 'text-blue-600 dark:text-blue-400' : ''}`} />
+                            <span className={`text-left ${isSpecial ? 'text-blue-800 dark:text-blue-200' : ''}`}>{item.label}</span>
                             {isSpecial && (
                               <div className="ml-auto relative">
                                 <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
